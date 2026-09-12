@@ -36,7 +36,13 @@ Two boundary rules that the EventStorming did not make explicit:
 - Ride Operations and Animal and Enclosure Care own real operational availability. Attraction Catalogue publishes it and cannot override a safety closure.
 - Queue entry and exit, attraction entry, and enclosure entry and exit belong to Admission and Visitor Flow, not to the operational domain that owns the attraction. They are visitor movement, not operational work.
 
-The digitized model is in `eventstorming/eventstorming-von-digitalis.drawio`.
+The digitized EventStorming model behind these boundaries:
+
+- [EventStorming by domain boundary](../eventstorming/01-eventstorming-by-domain-boundary.png)
+- [Domain boundaries and event flow](../eventstorming/02-domain-boundaries-event-flow.png)
+- [Cross-domain policies](../eventstorming/03-cross-domain-policies.png)
+
+Editable source: [eventstorming-von-digitalis.drawio](../eventstorming/eventstorming-von-digitalis.drawio).
 
 ## Consequences
 
