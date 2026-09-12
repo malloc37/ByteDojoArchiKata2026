@@ -1,6 +1,6 @@
 # Use Domain-Driven Design
 
-Date: 2026-09-05
+Date: 2026-09-07
 
 ## Status
 
