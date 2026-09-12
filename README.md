@@ -3,13 +3,11 @@
 **Build a dependable estate platform first. Add AI around it to detect patterns and
 recommend actions.**
 
-O'Reilly Architectural Kata 2026 — AI-assisted software architecture. Team ByteDojo.
-
 The estate runs 40 historic rides and more than 200 animals across 55 enclosures, for
 5,000 visitors a day growing to at least 15,000. Wi-Fi coverage across the grounds is
-patchy. Essential operations — selling tickets, admitting visitors, closing an unsafe
-ride, recording animal care — continue when the internet, the cloud or an AI provider is
-unavailable. **AI never sits in the control path.**
+patchy. Essential operations like selling tickets, admitting visitors, closing an unsafe
+ride, recording animal care continue when the internet, the cloud or an AI provider is
+unavailable. AI never does not sit in the control path.
 
 ---
 
