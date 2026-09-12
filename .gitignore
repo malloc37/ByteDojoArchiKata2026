@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# draw.io backup and lock files
+.$*.drawio.bkp
+.$*.drawio.dtmp
+*.drawio.bkp
+
+# Obsidian workspace state
+.obsidian/
+
+# editors
+.vscode/
+.idea/
+*.swp
+
+# python helper output
+__pycache__/
+*.pyc

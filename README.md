@@ -7,7 +7,33 @@ The estate runs 40 historic rides and more than 200 animals across 55 enclosures
 5,000 visitors a day growing to at least 15,000. Wi-Fi coverage across the grounds is
 patchy. Essential operations like selling tickets, admitting visitors, closing an unsafe
 ride, recording animal care continue when the internet, the cloud or an AI provider is
-unavailable. AI never does not sit in the control path.
+unavailable. AI does not sit in the control path.
+
+---
+
+## How AI solves the Countess's problems
+
+Three problems were named: animals are costly and far more costly once sick, nobody knows
+where to invest and deploy staff, and visitor numbers need to grow. Three AI use cases
+answer them, one each.
+
+A keeper feeds an animal and records it on a phone. That record, plus enclosure sensor
+readings, flows to the cloud. Overnight a model notices that one animal has eaten less for
+three days while its activity dropped. It raises an anomaly with a confidence score and
+the exact events it looked at. A keeper gets an inspection task, checks the animal, and
+records what they found. The record the keeper writes is the fact. The model's opinion
+stays an opinion.
+
+Through the day, counts from gates, areas and queues build a picture of where visitors
+actually go. A forecast tells the Operations Manager where the crowd will be in two hours
+so staff move before the queue forms, and it shows the Countess which parts of the estate
+earn their keep. Visitors get a suggested route built from real availability and real queue
+lengths, so a first visit feels well planned rather than lucky.
+
+Then the internet drops for an hour. Gates keep admitting people, the faulty ride stays
+closed, keepers keep recording care, and the overdue-feeding rule still raises tasks.
+The forecasts and suggestions simply stop until the connection returns. Nothing that
+matters was waiting on a model.
 
 ---
 
@@ -17,7 +43,7 @@ unavailable. AI never does not sit in the control path.
 | # | What | Why it matters |
 |---|---|---|
 | 1 | [System context](diagrams/context-estate.png) | Who uses the estate, and the one boundary that matters: cloud vs estate |
-| 2 | [ADR-003 — Deterministic core with advisory AI](adrs/adr-003-deterministic-core-advisory-ai.md) | The decision everything else follows from |
+| 2 | [ADR-003, deterministic core with advisory AI](adrs/adr-003-deterministic-core-advisory-ai.md) | The decision everything else follows from |
 | 3 | [Cloud authority with estate continuity](diagrams/architecture-cloud-estate.png) | How the estate keeps working when the cloud does not |
 
 ---
@@ -27,8 +53,8 @@ unavailable. AI never does not sit in the control path.
 **The cloud is the authoritative system of record.** It holds long-term records and event
 history, serves the visitor website, and runs the business services for all seven domains.
 
-**The estate keeps working without it.** An Estate Edge Hub holds a small cache — signing
-keys, validation rules, daily plans — plus a lightweight local database of current state
+**The estate keeps working without it.** An Estate Edge Hub holds a small cache of signing
+keys, validation rules and daily plans, plus a lightweight local database of current state
 and pending events. Gates verify signed tickets offline against a cached public key.
 Deterministic safety policies, such as *a ride with a safety fault cannot operate*, execute
 at the edge so they survive an outage ([ADR-006](adrs/adr-006-policies-execute-at-edge.md)).
@@ -52,10 +78,14 @@ Each is a `.drawio` source with a rendered `.png` beside it.
 |---|---|
 | [System context](diagrams/context-estate.png) | Actors, the platform boundary, and the two external systems we depend on |
 | [Cloud and estate](diagrams/architecture-cloud-estate.png) | Containers on both sides of the boundary and what crosses it |
-| [Connectivity tiers](diagrams/connectivity-tiers.png) | One link type per job — Ethernet/PoE, Wi-Fi, LoRaWAN/Thread — and why |
+| [Connectivity tiers](diagrams/connectivity-tiers.png) | One link type per job (Ethernet/PoE, Wi-Fi, LoRaWAN/Thread) and why |
 | [EventStorming by domain boundary](eventstorming/01-eventstorming-by-domain-boundary.png) | The full domain model, mapped to the seven bounded contexts |
 | [Domain boundaries and event flow](eventstorming/02-domain-boundaries-event-flow.png) | Which events cross which boundary |
 | [Cross-domain policies](eventstorming/03-cross-domain-policies.png) | Every policy, with the owning boundary on each side |
+| [AI decision-support pattern](diagrams/ai-decision-support-pattern.png) | The pipeline every AI use case follows |
+| [UC-1 Animal health](diagrams/ai-animal-health.png) | Anomaly detection, review path, and what happens when it is wrong |
+| [UC-2 Crowd and staffing](diagrams/ai-crowd-staffing.png) | Forecasting, review path, and the deterministic capacity policy beside it |
+| [UC-3 Visitor itinerary](diagrams/ai-visitor-itinerary.png) | Recommendation, the closed-attraction check, and the non-AI fallback |
 
 Component names describe **capability, not product**. Technology choices live in the ADRs.
 
@@ -83,7 +113,7 @@ publishes it and cannot override a safety closure.
 ## Decisions
 
 Short ADRs with context and alternatives, decision, and consequences.
-*Accepted* means the team agreed it. *Proposed* means it is drafted or still open — we have
+*Accepted* means the team agreed it. *Proposed* means it is drafted or still open. We have
 kept that distinction honest rather than marking everything accepted.
 
 | ADR | Decision | Status |
@@ -102,6 +132,7 @@ kept that distinction honest rather than marking everything accepted.
 | [012](adrs/adr-012-identity-authorization-attribution.md) | Identity, authorization and attribution | Proposed |
 | [013](adrs/adr-013-privacy-consent-retention.md) | Privacy, consent and retention of visitor data | Proposed |
 | [014](adrs/adr-014-payment-provider.md) | Use an external payment provider | Proposed |
+| [015](adrs/adr-015-first-release-ai-use-cases.md) | First-release AI use cases | Proposed |
 
 ---
 
@@ -112,21 +143,37 @@ kept that distinction honest rather than marking everything accepted.
 | What can AI change?                    | Nothing consequential. It produces recommendations: deterministic rules and named people decide.                                      | [ADR-003](adrs/adr-003-deterministic-core-advisory-ai.md)                     |
 | How is uncertainty handled?            | Every result carries confidence, model or rule version, source-data references and creation time. Abstention is a valid result.       | [ADR-003](adrs/adr-003-deterministic-core-advisory-ai.md), FR-EI-07, FR-EI-10 |
 | How is a recommendation verified?      | A responsible staff member accepts, rejects or corrects it, and the outcome is recorded.                                              | FR-EI-08, [ADR-011](adrs/adr-011-ai-evaluation-human-review.md)               |
-| What if the provider disappears?       | Capabilities sit behind task-shaped interfaces; provider choice is configuration. The estate keeps operating with no recommendations. | [ADR-010](adrs/adr-010-ai-orchestration.md), QA-06                            |
-| Can staff see why an alert was raised? | Yes — inputs and model or rule version, without engineering support.                                                                  | [QA-05 Explainability](quality-attributes.md#qa-05-explainability)            |
+| What if the provider disappears?       | Capabilities sit behind task-shaped interfaces. Provider choice is configuration. The estate keeps operating with no recommendations. | [ADR-010](adrs/adr-010-ai-orchestration.md), QA-06                            |
+| Can staff see why an alert was raised? | Yes, inputs and model or rule version, without engineering support.                                                                  | [QA-05 Explainability](quality-attributes.md#qa-05-explainability)            |
 
 Sensor observations, AI inferences, keeper decisions and confirmed diagnoses stay
 separately identifiable. A model never silently becomes a fact.
+
+**The three first-release use cases**, each answering one of the Countess's problems.
+Full catalogue, including what was deferred and why, in
+[ai-use-cases.md](ai-use-cases.md). The selection is
+[ADR-015](adrs/adr-015-first-release-ai-use-cases.md).
+
+| Use case | Solves | Targeted view |
+|---|---|---|
+| Animal health anomaly detection | Sick animals are expensive | [diagram](diagrams/ai-animal-health.png) |
+| Crowd forecasting and staffing | Where to invest and deploy staff | [diagram](diagrams/ai-crowd-staffing.png) |
+| Visitor itinerary recommendation | Growing visitor numbers | [diagram](diagrams/ai-visitor-itinerary.png) |
+
+All three follow one pipeline:
+[the AI decision-support pattern](diagrams/ai-decision-support-pattern.png).
 
 ---
 
 ## Requirements and quality attributes
 
-- **[Functional Requirements](functional-requirements.md)** — what the system must do,
+- **[Functional Requirements](functional-requirements.md)** what the system must do,
   by bounded context, plus the cross-domain policy table.
-- **[Quality Attributes](quality-attributes.md)** — eight scenarios with a measure and a
+- **[Quality Attributes](quality-attributes.md)** eight scenarios with a measure and a
   stated cost, and a traceability table from each attribute to the requirements, decisions
   and diagrams that serve it.
+
+- **[AI Use Cases](ai-use-cases.md)** what each use case reads, produces, when it abstains, who reviews it, what it costs to be wrong, and how it is measured.
 
 The quality attributes also name what we deliberately did **not** optimise for.
 
@@ -140,7 +187,7 @@ We have kept open questions visible rather than presenting them as settled:
 - How long a gate may run offline, and the acceptable duplicate-ticket risk ([ADR-008](adrs/adr-008-signed-offline-ticket-validation.md)).
 - Consent scope and movement-data retention ([ADR-013](adrs/adr-013-privacy-consent-retention.md)).
 - The identity and authorization model ([ADR-012](adrs/adr-012-identity-authorization-attribution.md)).
-- Which AI use cases ship first, and how they are scored ([ADR-010](adrs/adr-010-ai-orchestration.md), [ADR-011](adrs/adr-011-ai-evaluation-human-review.md)).
+- How AI results are scored and monitored ([ADR-011](adrs/adr-011-ai-evaluation-human-review.md)). The use cases themselves are chosen in [ADR-015](adrs/adr-015-first-release-ai-use-cases.md).
 
 Red stickies on the [EventStorming model](eventstorming/01-eventstorming-by-domain-boundary.png)
 mark these in place, alongside the key business moments.
@@ -153,6 +200,7 @@ mark these in place, alongside the key business moments.
 adrs/                 architecture decision records, plus the template
 diagrams/             context, cloud/estate and connectivity (.drawio + .png)
 eventstorming/        digitized EventStorming model (.drawio + .png)
+ai-use-cases.md
 functional-requirements.md
 quality-attributes.md
 ```
