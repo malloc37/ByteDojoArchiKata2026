@@ -75,7 +75,7 @@ Every stored data category has a recorded consent basis and retention period.
 **Cost.** Some personalization is weaker without identity. Itinerary and return-offer
 features depend on consent that some visitors will not give.
 
-**Open.** Consent scope and movement-data retention are not decided.
+**Open.** Retention periods are proposed in [ADR-013](adrs/adr-013-privacy-consent-retention.md) and await team agreement.
 
 ---
 
@@ -117,14 +117,15 @@ not to read another context's tables directly.
 **Scenario.** Daily visitors grow from 5,000 to 15,000, with arrivals concentrated in the
 opening hour.
 
-**Response.** Gate validation is local and never waits on the cloud. The cloud receives
-estate events in batches rather than per event.
+**Response.** Gate validation is local and never waits on the cloud. The park service
+streams estate events to the cloud over one connection with cumulative acknowledgements,
+so no gate ever waits on a cloud round trip.
 
 **Measure.** Gate validation completes within **1 second** at the gate, with no cloud round
 trip. *Proposed.* 15,000 visitors per day is not a scale driver for the cloud application;
 a separate deployment needs evidence, not growth alone.
 
-**Cost.** Batch synchronization means cloud dashboards lag the estate during an outage.
+**Cost.** During an outage the cloud lags the estate until the stream has caught up.
 Reporting is eventually correct, not live.
 
 ---
@@ -153,20 +154,20 @@ decided.
 
 | Attribute | Requirements | Decisions | Shown in |
 |---|---|---|---|
-| QA-01 Availability | FR-AV-04, FR-AV-05, FR-RO-09, FR-AE-11 | ADR-003, ADR-006, ADR-007 | [cloud and estate](diagrams/architecture-cloud-estate.png), [connectivity](diagrams/connectivity-tiers.png) |
-| QA-02 Safety | FR-RO-04, FR-RO-09, FR-AE-09, FR-EI-09 | ADR-003, ADR-006 | [context](diagrams/context-estate.png), [cross-domain policies](eventstorming/03-cross-domain-policies.png) |
-| QA-03 Integrity | FR-TK-04, FR-TK-06, FR-AV-05 | ADR-005, ADR-007 | [cloud and estate](diagrams/architecture-cloud-estate.png) |
-| QA-04 Privacy | FR-AV-06, FR-AV-07, FR-EI-02, FR-EI-06 | ADR-013 | [EventStorming](eventstorming/01-eventstorming-by-domain-boundary.png) |
-| QA-05 Explainability | FR-AE-09, FR-EI-07, FR-EI-08, FR-EI-10, FR-ST-03 | ADR-003, ADR-006, ADR-010, ADR-011 | [EventStorming](eventstorming/01-eventstorming-by-domain-boundary.png) |
-| QA-06 Evolvability | FR-AC-04, FR-RO-07, FR-AE-08 | ADR-002, ADR-005, ADR-009, ADR-010 | [context](diagrams/context-estate.png), [boundaries](eventstorming/02-domain-boundaries-event-flow.png) |
-| QA-07 Performance and scale | FR-AV-04, FR-AV-07 | ADR-004, ADR-009 | [connectivity](diagrams/connectivity-tiers.png) |
-| QA-08 Security | FR-AV-01, FR-AV-04, FR-ST-03 | ADR-008, ADR-012, ADR-014 | [cloud and estate](diagrams/architecture-cloud-estate.png) |
+| QA-01 Availability | FR-AV-04, FR-AV-05, FR-RO-09, FR-AE-11 | [ADR-003](adrs/adr-003-deterministic-core-advisory-ai.md), [ADR-006](adrs/adr-006-policies-execute-at-edge.md), [ADR-007](adrs/adr-007-estate-cloud-sync-protocol.md), [ADR-016](adrs/adr-016-architecture-style.md) | [cloud and estate](diagrams/architecture-cloud-estate.png), [connectivity](diagrams/connectivity-tiers.png) |
+| QA-02 Safety | FR-RO-04, FR-RO-09, FR-AE-09, FR-EI-09 | [ADR-003](adrs/adr-003-deterministic-core-advisory-ai.md), [ADR-006](adrs/adr-006-policies-execute-at-edge.md) | [context](diagrams/context-estate.png), [cross-domain policies](eventstorming/03-cross-domain-policies.png) |
+| QA-03 Integrity | FR-TK-04, FR-TK-06, FR-AV-05 | [ADR-005](adrs/adr-005-integration-through-domain-events.md), [ADR-007](adrs/adr-007-estate-cloud-sync-protocol.md) | [cloud and estate](diagrams/architecture-cloud-estate.png) |
+| QA-04 Privacy | FR-AV-06, FR-AV-07, FR-EI-02, FR-EI-06 | [ADR-013](adrs/adr-013-privacy-consent-retention.md) | [EventStorming](eventstorming/01-eventstorming-by-domain-boundary.png) |
+| QA-05 Explainability | FR-AE-09, FR-EI-07, FR-EI-08, FR-EI-10, FR-ST-03 | [ADR-003](adrs/adr-003-deterministic-core-advisory-ai.md), [ADR-005](adrs/adr-005-integration-through-domain-events.md), [ADR-006](adrs/adr-006-policies-execute-at-edge.md), [ADR-010](adrs/adr-010-ai-orchestration.md), [ADR-011](adrs/adr-011-ai-evaluation-human-review.md) | [EventStorming](eventstorming/01-eventstorming-by-domain-boundary.png) |
+| QA-06 Evolvability | FR-AC-04, FR-RO-07, FR-AE-08 | [ADR-002](adrs/adr-002-bounded-contexts.md), [ADR-005](adrs/adr-005-integration-through-domain-events.md), [ADR-009](adrs/adr-009-modular-monolith.md), [ADR-010](adrs/adr-010-ai-orchestration.md), [ADR-016](adrs/adr-016-architecture-style.md) | [context](diagrams/context-estate.png), [boundaries](eventstorming/02-domain-boundaries-event-flow.png) |
+| QA-07 Performance and scale | FR-AV-04, FR-AV-07 | [ADR-004](adrs/adr-004-mixed-connectivity-mqtt.md), [ADR-007](adrs/adr-007-estate-cloud-sync-protocol.md), [ADR-009](adrs/adr-009-modular-monolith.md) | [connectivity](diagrams/connectivity-tiers.png) |
+| QA-08 Security | FR-AV-01, FR-AV-04, FR-ST-03 | [ADR-008](adrs/adr-008-signed-offline-ticket-validation.md), [ADR-012](adrs/adr-012-identity-authorization-attribution.md), [ADR-014](adrs/adr-014-payment-provider.md) | [cloud and estate](diagrams/architecture-cloud-estate.png) |
 
 ## Attributes we deliberately did not prioritise
 
 - **Low latency of AI recommendations.** People review consequential findings, so minutes
   are acceptable.
-- **Live cloud reporting during an outage.** Batch synchronization is enough; correctness
-  matters more than freshness.
+- **Live cloud reporting during an outage.** Catching up after reconnect is enough;
+  correctness matters more than freshness.
 - **Horizontal scalability of the cloud application.** 15,000 visitors per day does not
   require it, and a modular monolith can be split later.
