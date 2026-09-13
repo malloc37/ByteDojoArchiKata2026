@@ -45,6 +45,7 @@ matters was waiting on a model.
 | 1 | [System context](diagrams/context-estate.png) | Who uses the estate, and the one boundary that matters: cloud vs estate |
 | 2 | [ADR-003, deterministic core with advisory AI](adrs/adr-003-deterministic-core-advisory-ai.md) | The decision everything else follows from |
 | 3 | [Cloud authority with estate continuity](diagrams/architecture-cloud-estate.png) | How the estate keeps working when the cloud does not |
+| 4 | [ADR-016, architecture style](adrs/adr-016-architecture-style.md) | Which styles we compared, against which characteristics, and why two services |
 
 ---
 
@@ -122,17 +123,18 @@ kept that distinction honest rather than marking everything accepted.
 | [002](adrs/adr-002-bounded-contexts.md) | Bounded contexts and domain boundaries | Accepted |
 | [003](adrs/adr-003-deterministic-core-advisory-ai.md) | Deterministic operational core with advisory AI | Accepted |
 | [004](adrs/adr-004-mixed-connectivity-mqtt.md) | Mixed connectivity with MQTT as the estate-local transport | Proposed |
-| [005](adrs/adr-005-integration-through-domain-events.md) | Integration through published domain events | Proposed |
+| [005](adrs/adr-005-integration-through-domain-events.md) | Integration through published domain events | Accepted |
 | [006](adrs/adr-006-policies-execute-at-edge.md) | Cross-domain policies execute at the estate edge | Accepted |
 | [007](adrs/adr-007-estate-cloud-sync-protocol.md) | Estate-to-cloud synchronization protocol | Proposed |
 | [008](adrs/adr-008-signed-offline-ticket-validation.md) | Signed offline ticket validation | Proposed |
 | [009](adrs/adr-009-modular-monolith.md) | Start the cloud platform as a modular monolith | Accepted |
 | [010](adrs/adr-010-ai-orchestration.md) | AI orchestration behind stable interfaces | Proposed |
-| [011](adrs/adr-011-ai-evaluation-human-review.md) | AI evaluation and human review | Proposed |
+| [011](adrs/adr-011-ai-evaluation-human-review.md) | AI evaluation and human review | Accepted |
 | [012](adrs/adr-012-identity-authorization-attribution.md) | Identity, authorization and attribution | Proposed |
-| [013](adrs/adr-013-privacy-consent-retention.md) | Privacy, consent and retention of visitor data | Proposed |
+| [013](adrs/adr-013-privacy-consent-retention.md) | Privacy, consent and retention of visitor data | Accepted |
 | [014](adrs/adr-014-payment-provider.md) | Use an external payment provider | Proposed |
 | [015](adrs/adr-015-first-release-ai-use-cases.md) | First-release AI use cases | Proposed |
+| [016](adrs/adr-016-architecture-style.md) | Architecture style: two services, event-driven inside and between them | Proposed |
 
 ---
 
@@ -183,11 +185,12 @@ The quality attributes also name what we deliberately did **not** optimise for.
 
 We have kept open questions visible rather than presenting them as settled:
 
-- The estate-to-cloud synchronization protocol ([ADR-007](adrs/adr-007-estate-cloud-sync-protocol.md)).
+- The longest outage the estate must bridge, and how the estate and the cloud authenticate each other ([ADR-007](adrs/adr-007-estate-cloud-sync-protocol.md)).
 - How long a gate may run offline, and the acceptable duplicate-ticket risk ([ADR-008](adrs/adr-008-signed-offline-ticket-validation.md)).
-- Consent scope and movement-data retention ([ADR-013](adrs/adr-013-privacy-consent-retention.md)).
+- Retention periods for visitor data, proposed but not agreed ([ADR-013](adrs/adr-013-privacy-consent-retention.md)).
 - The identity and authorization model ([ADR-012](adrs/adr-012-identity-authorization-attribution.md)).
-- How AI results are scored and monitored ([ADR-011](adrs/adr-011-ai-evaluation-human-review.md)). The use cases themselves are chosen in [ADR-015](adrs/adr-015-first-release-ai-use-cases.md).
+- The three driving characteristics for the architecture style, and whether Ticketing becomes its own cloud service ([ADR-016](adrs/adr-016-architecture-style.md)).
+- The acceptance threshold at which an AI use case may leave full human review ([ADR-011](adrs/adr-011-ai-evaluation-human-review.md)). The use cases themselves are chosen in [ADR-015](adrs/adr-015-first-release-ai-use-cases.md).
 
 Red stickies on the [EventStorming model](eventstorming/01-eventstorming-by-domain-boundary.png)
 mark these in place, alongside the key business moments.
@@ -198,7 +201,7 @@ mark these in place, alongside the key business moments.
 
 ```
 adrs/                 architecture decision records, plus the template
-diagrams/             context, cloud/estate and connectivity (.drawio + .png)
+diagrams/             context, cloud/estate, connectivity (.drawio + .png), styles worksheet
 eventstorming/        digitized EventStorming model (.drawio + .png)
 ai-use-cases.md
 functional-requirements.md
