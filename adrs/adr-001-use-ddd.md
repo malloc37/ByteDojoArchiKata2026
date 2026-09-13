@@ -2,21 +2,39 @@
 
 Date: 2026-09-07
 
+Owner: LJO
+
 ## Status
 
 Accepted
 
 ## Context
 
-We have limited time to develop an initial architecture and need a shared understanding of the business problem.
+We are three people with limited time. The brief names business problems, not system
+boundaries. The domain is concrete: animals, enclosures, rides, tickets and gates are
+physical things with clear owners on the estate, so a method that starts from the
+language of the business fits.
+
+Alternatives considered:
+
+- Design from the brief's feature list. Rejected. Every later decision would re-argue
+  what a "ride" or an "attraction" includes.
+- Model the data first. Rejected. Tables do not show who may change what, and ownership
+  of availability and safety closures is the question we most needed answered.
 
 ## Decision
 
-We use Domain-Driven Design (DDD) to build a common understanding of the business problem. Technical and non-technical team members can participate.
+We use Domain-Driven Design: one ubiquitous language for the estate, split into bounded
+contexts where rules and ownership change.
 
-We use EventStorming to collaboratively discover the first domain model and its boundaries.
+We ran a physical EventStorming session to discover the first model. All participants
+were technical. The digitized result is in [eventstorming/](../eventstorming/).
 
 ## Consequences
 
-- The team develops a shared understanding of the business and its language.
-- DDD activities consume some of our limited architecture time.
+- Later documents name a context instead of describing scope again. [ADR-002](adr-002-bounded-contexts.md) records the
+  boundaries.
+- Authority over real availability and safety closures has a clear home from the start.
+- The session and the digitizing took time we could have spent on technical design.
+- Two contexts had no stickies in the session and were reconstructed afterwards. They
+  are the least validated part of the model.
