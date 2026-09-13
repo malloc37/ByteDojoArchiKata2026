@@ -122,7 +122,7 @@ kept that distinction honest rather than marking everything accepted.
 | [001](adrs/adr-001-use-ddd.md) | Use Domain-Driven Design | Accepted |
 | [002](adrs/adr-002-bounded-contexts.md) | Bounded contexts and domain boundaries | Accepted |
 | [003](adrs/adr-003-deterministic-core-advisory-ai.md) | Deterministic operational core with advisory AI | Accepted |
-| [004](adrs/adr-004-mixed-connectivity-mqtt.md) | Mixed connectivity with MQTT as the estate-local transport | Proposed |
+| [004](adrs/adr-004-mixed-connectivity-mqtt.md) | Estate device connectivity using LoRaWAN, local IP and MQTT | Proposed |
 | [005](adrs/adr-005-integration-through-domain-events.md) | Integration through published domain events | Accepted |
 | [006](adrs/adr-006-policies-execute-at-edge.md) | Cross-domain policies execute at the estate edge | Accepted |
 | [007](adrs/adr-007-estate-cloud-sync-protocol.md) | Estate-to-cloud synchronization protocol | Proposed |
