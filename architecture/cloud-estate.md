@@ -5,10 +5,26 @@ Estate Edge Hub keeps essential park operations available during an internet out
 
 ![Cloud and estate architecture](../diagrams/architecture-cloud-estate.png)
 
-The estate records admissions, ride operations and animal care locally. A WebSocket
-sends pending domain events to the cloud and returns the small operational cache when
-connectivity is available. Estate devices use the connectivity described in the
-[connectivity view](../diagrams/connectivity-tiers.png).
+## How it works
+
+**The cloud platform is authoritative.** Its modular monolith keeps the authoritative
+event log, serves the visitor application and runs cloud analysis.
+
+**The estate keeps working without it.** The smaller modular monolith on the Estate Edge
+Hub runs admission, ride safety, animal care and staff tasks from a local event log and
+cached keys, rules, roles and daily plans. Gates validate signed tickets without the
+cloud.
+
+**Events go up, and a small cache and AI findings come down.** One resumable WebSocket
+carries pending domain events to the cloud and versioned updates to the estate. Both sides
+continue from their last acknowledgement after an outage. Published events integrate
+state changes ([ADR-005](../adrs/adr-005-integration-through-domain-events.md)), and
+ingestion deduplicates them by event ID.
+
+Estate devices use the connectivity described in the
+[connectivity view](../diagrams/connectivity-tiers.png). AI consumes recorded facts and
+returns recommendations; it is not part of the operational control path. Consequential
+findings reach Staff Tasks at the estate, which assigns them to a named person.
 
 This view is justified by:
 

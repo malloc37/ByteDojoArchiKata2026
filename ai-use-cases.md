@@ -30,8 +30,10 @@ for the estate is in [business outcomes and cost](business-outcomes.md).
 
 ## UC-1 Animal health anomaly detection
 
-**Diagram:** [ai-animal-health.png](diagrams/ai-animal-health.png). How a finding reaches
-the keeper is drawn in [ai-task-delivery.png](diagrams/ai-task-delivery.png).
+![Animal health anomaly detection](diagrams/ai-animal-health.png)
+
+How a finding reaches the keeper is drawn in
+[AI task delivery](diagrams/ai-task-delivery.png).
 
 **Problem.** Looking after the animals is costly, and far more costly once one is ill.
 Over 200 animals across 55 enclosures is more than keepers can watch closely at all times.
@@ -72,7 +74,7 @@ share of tasks accepted, and anomalies a keeper finds on rounds with no prior al
 
 ## UC-2 Crowd forecasting and staffing
 
-**Diagram:** [ai-crowd-staffing.png](diagrams/ai-crowd-staffing.png)
+![Crowd forecasting and staffing](diagrams/ai-crowd-staffing.png)
 
 **Problem.** The Countess needs to know where to invest and where to deploy staff, and
 visitor numbers are expected to triple.
@@ -113,10 +115,10 @@ recommendations.
 
 ## UC-3 Visitor itinerary recommendation
 
-**Diagram:** [ai-visitor-itinerary.png](diagrams/ai-visitor-itinerary.png)
-
 **Problem.** The estate needs to grow visitor numbers, and the brief asks for AI that helps
 customers and not only the company. A good visit is the thing visitors talk about.
+
+![Visitor itinerary recommendation](diagrams/ai-visitor-itinerary.png)
 
 **Reads.** Published attraction availability from the Attraction Catalogue, current queue
 lengths, the crowding forecast from UC-2 with its range, and the visitor's stated
