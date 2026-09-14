@@ -209,10 +209,11 @@ The quality attributes also state what we deliberately did **not** optimize for.
 
 We have kept open questions visible rather than presenting them as settled:
 
-- The longest outage the estate must bridge, and how the estate and the cloud authenticate each other ([ADR-007](adrs/adr-007-estate-cloud-sync-protocol.md)).
+- The longest outage the estate must bridge ([ADR-007](adrs/adr-007-estate-cloud-sync-protocol.md)).
+- The validity period of a gate's cached keys and rules, proposed at 7 days ([ADR-008](adrs/adr-008-signed-offline-ticket-validation.md)).
 - Retention periods for visitor data, proposed but not agreed ([ADR-013](adrs/adr-013-privacy-consent-retention.md)).
 - Whether one-way staff provisioning and offline staff sign-in work in practice ([ADR-012](adrs/adr-012-identity-authorization-attribution.md)).
-- The cloud provider whose model platform hosts the language models, the retry limit for invalid structured output, and how long long-running process records are kept ([ADR-010](adrs/adr-010-ai-orchestration.md)).
+- The retry limit for invalid structured output and the retention of process records, proposed in [ADR-010](adrs/adr-010-ai-orchestration.md). The Model Provider is configuration, not a decision.
 - The proposed numbers behind AI evaluation: thresholds, repeated runs, cold-start periods and the acceptance threshold at which review may relax ([ADR-011](adrs/adr-011-ai-evaluation-human-review.md), [ADR-017](adrs/adr-017-ai-model-approach-and-confidence.md)).
 
 Red stickies on the [EventStorming model](eventstorming/01-eventstorming-by-domain-boundary.png)
