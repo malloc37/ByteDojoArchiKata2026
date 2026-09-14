@@ -26,6 +26,10 @@ insights in the cloud.**
 
 ![Byte Dojo Team](./assets/byte-dojo-team.png)
 
+- Moritz
+- Luka
+- Besmir
+
 ## Introduction
 
 The estate runs 40 historic rides and more than 200 animals across 55 enclosures, for
