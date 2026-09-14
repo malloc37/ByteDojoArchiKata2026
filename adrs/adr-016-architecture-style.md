@@ -82,5 +82,3 @@ See [cloud and estate](../diagrams/architecture-cloud-estate.png).
   than a call stack. Tracing across both services is needed from the first release.
 - The cloud lags the estate during an outage ([QA-07](../quality-attributes.md#qa-07-performance-and-scale)). [ADR-008](adr-008-signed-offline-ticket-validation.md) exists because the
   two services can disagree for a while.
-
-Open: whether Ticketing becomes its own cloud service. Today [ADR-009](adr-009-modular-monolith.md) keeps it a module.

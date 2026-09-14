@@ -135,19 +135,19 @@ Reporting is eventually correct, not live.
 **Scenario.** Someone copies a valid ticket and presents it at a second gate during an
 outage. Separately, an unknown device attempts to publish events.
 
-**Response.** Tickets are signed, not secret. The gate verifies the signature with a cached
-public key and applies cached eligibility rules. Devices and staff actions are
-attributable.
+**Response.** Tickets are signed, not secret. The gate verifies the signature with a
+cached public key, applies cached eligibility rules and atomically claims the ticket ID
+in the shared estate-local admission state. Devices and staff actions are attributable.
 
-**Measure.** A forged or altered ticket fails verification **offline**, with no cloud call.
-Every consequential action records which person or device performed it and when.
+**Measure.** A forged or altered ticket fails verification **offline**, with no cloud
+call. A second use is rejected while gates can reach the Estate Edge Hub. Every
+consequential action records which person or device performed it and when.
 
-**Cost.** Offline verification cannot detect reuse across disconnected gates. That is a
-business risk to be bounded, not a cryptography problem.
+**Cost.** Automatic admission depends on the estate-local network and Edge Hub, although
+it does not depend on the internet or cloud. Their failure needs a manual procedure.
 
-**Open.** Duplicate use at isolated gates is decided: admit, then resolve after
-synchronization ([ADR-008](adrs/adr-008-signed-offline-ticket-validation.md)). Offline staff sign-in through an estate identity provider is
-proposed and still has to be proven ([ADR-012](adrs/adr-012-identity-authorization-attribution.md)).
+**Open.** Offline staff sign-in through an estate identity provider is proposed and still
+has to be proven ([ADR-012](adrs/adr-012-identity-authorization-attribution.md)).
 
 ---
 

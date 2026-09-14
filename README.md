@@ -18,6 +18,7 @@ insights in the cloud.**
 - [How it works](#how-it-works)
 - [How we handle AI](#how-we-handle-ai)
 - [Open decisions](#open-decisions)
+- [Known limitations](#known-limitations)
 - [Repository layout](#repository-layout)
 
 ---
@@ -176,15 +177,32 @@ All three follow one pipeline:
 We have kept open questions visible rather than presenting them as settled:
 
 - The longest outage the estate must bridge, and how the estate and the cloud authenticate each other ([ADR-007](adrs/adr-007-estate-cloud-sync-protocol.md)).
-- The maximum age of a gate's cached keys and rules ([ADR-008](adrs/adr-008-signed-offline-ticket-validation.md)). Duplicate use at isolated gates is decided: admit, then resolve after synchronization.
 - Retention periods for visitor data, proposed but not agreed ([ADR-013](adrs/adr-013-privacy-consent-retention.md)).
 - Whether one-way staff provisioning and offline staff sign-in work in practice ([ADR-012](adrs/adr-012-identity-authorization-attribution.md)).
-- Whether Ticketing becomes its own cloud service ([ADR-016](adrs/adr-016-architecture-style.md)).
 - The cloud provider whose model platform hosts the AI models, the retry limit for invalid structured output, and how long long-running process records are kept ([ADR-010](adrs/adr-010-ai-orchestration.md)).
 - The acceptance threshold at which an AI use case may leave full human review ([ADR-011](adrs/adr-011-ai-evaluation-human-review.md)). The use cases themselves are chosen in [ADR-015](adrs/adr-015-first-release-ai-use-cases.md).
 
 Red stickies on the [EventStorming model](eventstorming/01-eventstorming-by-domain-boundary.png)
 mark these in place, alongside the key business moments.
+
+---
+
+## Known limitations
+
+- Cloud reporting is stale during an internet outage and catches up after reconnection
+  ([ADR-007](adrs/adr-007-estate-cloud-sync-protocol.md)).
+- Automatic gate admission depends on the estate-local network and Edge Hub. A local
+  infrastructure failure requires a manual admission procedure
+  ([ADR-008](adrs/adr-008-signed-offline-ticket-validation.md)).
+- A staff role revoked in the cloud may remain usable at the estate until synchronization
+  resumes; an authorized local administrator can disable it sooner
+  ([ADR-012](adrs/adr-012-identity-authorization-attribution.md)).
+- New online payments stop while the payment provider or internet connection is
+  unavailable; already issued tickets continue to work
+  ([ADR-014](adrs/adr-014-payment-provider.md)).
+- AI produces no recommendation when its provider is unavailable or its input data is
+  insufficient. Essential estate operations continue without it
+  ([ADR-003](adrs/adr-003-deterministic-core-advisory-ai.md)).
 
 ---
 

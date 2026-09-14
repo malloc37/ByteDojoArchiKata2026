@@ -34,8 +34,9 @@ digital signature.
 
 - The private signing key remains in the cloud. Gates receive the corresponding public
   verification keys and admission rules in advance through the Estate Edge Hub.
-- A gate verifies the signature and applies its cached rules locally. It never waits for
-  MQTT, the Edge Hub or the cloud before making the admission decision.
+- A gate verifies the signature and applies its cached rules locally. Before opening, it
+  atomically claims the ticket ID in the shared admission state on the Estate Edge Hub.
+  It never waits for MQTT or the cloud.
 - The gate records every accepted or rejected validation locally with a stable event ID,
   ticket ID, gate ID, occurrence time, result, reason, verification-key ID and rule
   version. It publishes the event over MQTT when connectivity is available
@@ -43,10 +44,9 @@ digital signature.
 - Public-key rotation uses an overlap period so gates can validate tickets signed with
   either the current or previous key. Gates report stale keys and rules as a health
   warning before they expire.
-- When connected to the local estate network, gates use the shared local admission view
-  to detect ticket reuse. If gates become isolated, a valid signed ticket is admitted;
-  duplicate use discovered after synchronization becomes an exception for Admission
-  Staff rather than blocking the queue.
+- The Estate Edge Hub accepts only the first valid use claim for a ticket. A later claim
+  is rejected as reuse, including during an internet outage. Reliable connectivity
+  between gates and the estate-local network is an assumption of this decision.
 
 This decision supports tickets issued before an outage. Issuing and paying for new
 tickets during an outage is outside this ADR.
@@ -62,9 +62,11 @@ authorized users may resolve the ticket ID through Ticketing under the privacy r
   the private signing key is never placed on a gate.
 - Each validation can be audited later without copying personal details into admission
   events.
-- A copied ticket may be accepted at two mutually disconnected gates. This availability
-  trade-off is recorded and resolved after synchronization.
+- Duplicate use is prevented while the gate can reach the Estate Edge Hub, including
+  when the cloud is unavailable.
 - Gates require secure local storage, clock synchronization, key and rule distribution,
   and monitoring of cache age.
+- The Estate Edge Hub and local network are now in the automatic admission path. Their
+  failure requires the estate's manual admission procedure.
 - Admission events are delivered at least once, so the Edge Hub and cloud must
   deduplicate them by event ID ([QA-03](../quality-attributes.md#qa-03-integrity)).
