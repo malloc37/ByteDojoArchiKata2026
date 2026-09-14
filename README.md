@@ -1,19 +1,12 @@
-![Byte Dojo Team](./assets/byte-dojo-team.png)
+# O'Reilly Architectural Kata 2026: Von Digitalis Estate
 
-
-# Von Digitalis Estate
-
-**Build a dependable estate platform first. Add AI around it to detect patterns and
-recommend actions.**
-
-The estate runs 40 historic rides and more than 200 animals across 55 enclosures, for
-5,000 visitors a day growing to at least 15,000. Wi-Fi coverage across the grounds is
-patchy. Essential operations like selling tickets, admitting visitors, closing an unsafe
-ride, recording animal care continue when the internet, the cloud or an AI provider is
-unavailable. AI does not sit in the control path.
+**An offline-first estate platform with dependable local operations and AI-assisted
+insights in the cloud.**
 
 ## Contents
 
+- [Team](#team)
+- [Introduction](#introduction)
 - [How AI solves the Countess's problems](#how-ai-solves-the-countesss-problems)
 - [Architecture at a glance](#architecture-at-a-glance)
   - [System context](diagrams/context-estate.png)
@@ -28,6 +21,20 @@ unavailable. AI does not sit in the control path.
 - [Requirements and quality attributes](#requirements-and-quality-attributes)
 - [Open decisions](#open-decisions)
 - [Repository layout](#repository-layout)
+
+---
+
+## Team
+
+![Byte Dojo Team](./assets/byte-dojo-team.png)
+
+## Introduction
+
+The estate runs 40 historic rides and more than 200 animals across 55 enclosures, for
+5,000 visitors a day growing to at least 15,000. Wi-Fi coverage across the grounds is
+patchy. Essential operations like selling tickets, admitting visitors, closing an unsafe
+ride and recording animal care continue when the internet, the cloud or an AI provider
+is unavailable. AI does not sit in the control path.
 
 ---
 
