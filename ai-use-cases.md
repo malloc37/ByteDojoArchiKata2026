@@ -47,10 +47,11 @@ records. The model never produces a diagnosis.
 **Cost of being wrong.** A missed anomaly means a late detection, which is why it is not
 the only safety net. The deterministic overdue-feeding rule (FR-AE-11) and scheduled keeper
 rounds run without AI. A false alarm costs keeper time, but a missed anomaly costs more,
-so the threshold favours recall over precision ([ADR-011](adrs/adr-011-ai-evaluation-human-review.md)).
+so the confidence threshold favours recall over precision ([ADR-011](adrs/adr-011-ai-evaluation-human-review.md)).
 
-**Measured by.** Recall first, then precision, against keeper-confirmed outcomes on the
-golden set, plus the share of alerts a keeper accepts.
+**Measured by.** Recall, with a precision floor, against keeper-confirmed outcomes on the
+golden set. After release, the share of alerts a keeper accepts, and anomalies a keeper
+finds on rounds with no prior alert.
 
 ---
 
@@ -117,8 +118,9 @@ is checked deterministically before the itinerary is shown, not left to the mode
 **Cost of being wrong.** A mediocre route. The hard constraint above keeps a wrong
 suggestion from sending anyone to a closed attraction.
 
-**Measured by.** The share of recommendations a visitor follows, and a pass rate of 100 per
-cent on the closed-attraction check.
+**Measured by.** Judged itinerary quality on the golden set ([ADR-011](adrs/adr-011-ai-evaluation-human-review.md)),
+and after release the share of recommendations a visitor follows. The closed-attraction
+check is a deterministic guard, tested at 100 per cent, not a model score.
 
 ---
 

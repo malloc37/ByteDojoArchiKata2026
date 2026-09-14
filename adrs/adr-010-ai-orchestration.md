@@ -41,10 +41,12 @@ monolith that reaches models only through swappable adapters.
   and process records for long-running processes. A worker moves a process through
   `Requested`, `Running`, `Completed` or `Failed` and resumes it after a restart.
 - Each use case has a task-shaped port, for example detect animal anomaly. One adapter per
-  provider or model implements it. Adapter, model and prompt version are configuration.
+  provider or model implements it. Adapter, model, prompt version and confidence
+  threshold are configuration.
 - Models return structured output. Output that fails the schema is retried up to a limit,
-  then the use case abstains. If the provider is down, the use case produces nothing
-  (FR-EI-09).
+  then the use case abstains. An abstention records its reason, invalid output, low
+  confidence or incomplete input window, so [ADR-011](adr-011-ai-evaluation-human-review.md)
+  scores each apart. If the provider is down, the use case produces nothing (FR-EI-09).
 - Requests are sent one at a time.
 - [ADR-011](adr-011-ai-evaluation-human-review.md) golden sets run through the same port and adapter as production.
 
@@ -52,8 +54,9 @@ Still open: the cloud provider, the retry limit, and retention of process record
 
 ## Consequences
 
-- A model rollback is configuration. A new provider is a new adapter inside Estate
-  Insights. No other module changes.
+- A model rollback is configuration, together with the threshold [ADR-011](adr-011-ai-evaluation-human-review.md)
+  validated with it. A new provider is a new adapter inside Estate Insights. No other
+  module changes.
 - Projections fit [ADR-005](adr-005-integration-through-domain-events.md). Process records are the one store not rebuilt from the log;
   they hold progress, not conclusions.
 - One request at a time drains a backlog slowly, for example after an estate outage.

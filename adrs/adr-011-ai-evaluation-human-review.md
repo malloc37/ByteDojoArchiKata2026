@@ -38,26 +38,36 @@ review can be relaxed.
 - Each use case has a golden set: recorded inputs with the expected structured output,
   covering every value of the important fields. The reviewing role owns it (Zookeeper
   Staff Manager for animal health, Operations Manager for crowds), versioned with the
-  model and prompt it validated.
-- The score is accuracy on structured fields, plus the measure matching each use case's
-  cost of being wrong: recall over precision for animal health, forecast error for
-  crowding, 100 per cent on the closed-attraction check ([ai-use-cases.md](../ai-use-cases.md)).
-  Free-text fields use an LLM judge, itself checked against a human-rated set.
-- A model, prompt or provider change ships only if its score is at least that of the
-  version it replaces.
+  model, prompt and confidence threshold it validated.
+- Each use case names its measure in [ai-use-cases.md](../ai-use-cases.md), matching its
+  cost of being wrong: recall with a precision floor for animal health, forecast error
+  for crowding, judged itinerary quality for the itinerary. Accuracy is not a score:
+  anomalies are rare, so a model that never flags one scores well on it. The
+  closed-attraction check is a deterministic guard and is tested, not scored. Free-text
+  fields use an LLM judge, itself checked against a human-rated set.
+- The golden set run reports the measure at the configured confidence threshold, and
+  the threshold is chosen from that run.
+- A model, prompt or provider change ships only if its measure is at least that of the
+  version it replaces and any floor holds.
 - Reviewers accept, reject or correct each recommendation, recorded as an event
   (FR-EI-08). Acceptance, rejection and correction rates per use case and model version
-  are the monitoring signal. Rejected and corrected cases join the next golden set.
-- Every use case starts with full review. When acceptance stays above a threshold for a
-  set period (*proposed* 99 per cent over four weeks), the reviewing role may relax
-  review to sampling and let recommendations propagate. Below the threshold, full review
-  returns. Relaxation never touches the actions [ADR-003](adr-003-deterministic-core-advisory-ai.md) protects.
+  measure precision. A finding recorded with no prior recommendation, such as an anomaly
+  a keeper finds on rounds, is a missed case and measures recall. Rejected, corrected and
+  missed cases join the next golden set.
+- Every reviewed use case starts with full review. When acceptance stays above the use
+  case's acceptance threshold for a set period, the reviewing role may relax review to
+  sampling and let recommendations propagate. Thresholds are per use case, because a
+  recall-first use case rejects more by design (*proposed* 99 per cent over four weeks
+  for crowds, none yet for animal health). Below the threshold, full review returns.
+  Relaxation never touches the actions [ADR-003](adr-003-deterministic-core-advisory-ai.md) protects.
 
 ## Consequences
 
 - We can tell a bad model from a bad use case, and see when a provider update changed
   behaviour.
-- A use case accepted 99 per cent of the time earns autonomy; one rejected 99 per cent of
-  the time is reworked, and the events show why.
+- A use case above its acceptance threshold earns autonomy; one far below it is reworked,
+  and the events show why. A recall-first use case sits below the others by design.
+- Recall is visible only through missed cases. Keeper rounds and the overdue-feeding
+  rule (FR-AE-11) surface them, so they stay in place beside the model.
 - The golden set needs an owner who refreshes it, or scores drift from reality.
 - The LLM judge is a second model to evaluate. Avoid free text where possible.
