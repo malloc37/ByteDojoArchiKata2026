@@ -25,7 +25,8 @@ Alternatives considered:
 ## Decision
 
 We use Domain-Driven Design: one ubiquitous language for the estate, split into bounded
-contexts where rules and ownership change.
+contexts where rules and ownership change. The language is recorded in the
+[glossary](../glossary.md).
 
 We ran a physical EventStorming session to discover the first model. All participants
 were technical. The digitized result is in [eventstorming/](../eventstorming/).

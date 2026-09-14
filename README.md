@@ -169,6 +169,8 @@ All three follow one pipeline:
 
 ## Requirements and quality attributes
 
+- **[Glossary](glossary.md)** the key terms of the ubiquitous language from
+  [ADR-001](adrs/adr-001-use-ddd.md).
 - **[Functional Requirements](functional-requirements.md)** what the system must do,
   by bounded context, plus the cross-domain policy table.
 - **[Quality Attributes](quality-attributes.md)** eight scenarios with a measure and a
@@ -205,6 +207,7 @@ diagrams/             context, cloud/estate, connectivity (.drawio + .png), styl
 eventstorming/        digitized EventStorming model (.drawio + .png)
 ai-use-cases.md
 functional-requirements.md
+glossary.md
 quality-attributes.md
 ```
 
