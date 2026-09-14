@@ -8,15 +8,15 @@ insights in the cloud.**
 - [Team](#team)
 - [Introduction](#introduction)
 - [How AI solves the Countess's problems](#how-ai-solves-the-countesss-problems)
+- [EventStorming and domain discovery](#eventstorming-and-domain-discovery)
+- [Requirements and quality attributes](#requirements-and-quality-attributes)
 - [Architecture at a glance](#architecture-at-a-glance)
   - [System context](architecture/system-context.md)
   - [Deterministic core with advisory AI](adrs/adr-003-deterministic-core-advisory-ai.md)
   - [Cloud and estate architecture](architecture/cloud-estate.md)
   - [Architecture style](adrs/adr-016-architecture-style.md)
 - [How it works](#how-it-works)
-- [The seven bounded contexts](#the-seven-bounded-contexts)
 - [How we handle AI](#how-we-handle-ai)
-- [Requirements and quality attributes](#requirements-and-quality-attributes)
 - [Open decisions](#open-decisions)
 - [Repository layout](#repository-layout)
 
@@ -62,6 +62,37 @@ matters was waiting on a model.
 
 ---
 
+## EventStorming and domain discovery
+
+Before choosing technologies, we used EventStorming to understand what happens across
+the estate, who initiates each action and where business ownership changes. This took us
+from the Countess's broad optimization problem to seven explicit bounded contexts and
+the policies connecting them.
+
+The [EventStorming and domain discovery](eventstorming/README.md) page walks through the
+three iterations: the full business flow, the resulting domain boundaries and the
+cross-domain policies that shaped the architecture.
+
+---
+
+## Requirements and quality attributes
+
+The brief and EventStorming findings were turned into explicit requirements before the
+architecture was selected:
+
+- **[Glossary](glossary.md)** defines the ubiquitous language from
+  [ADR-001](adrs/adr-001-use-ddd.md).
+- **[Functional Requirements](functional-requirements.md)** describes the required
+  behavior by bounded context and the cross-domain policies.
+- **[Quality Attributes](quality-attributes.md)** defines eight measurable scenarios and
+  traces them to the requirements, decisions and diagrams that address them.
+- **[AI Use Cases](ai-use-cases.md)** records inputs, outputs, abstention, human review,
+  failure costs and measurements for each AI capability.
+
+The quality attributes also state what we deliberately did **not** optimize for.
+
+---
+
 ## Architecture at a glance
 
 
@@ -78,7 +109,10 @@ matters was waiting on a model.
 
 **The cloud platform is the authoritative system of record.** It is one modular monolith
 with a module per bounded context. It keeps the authoritative event log and serves the
-visitor website.
+visitor website. The relationship between both deployables is explained in
+[Cloud and estate: two modular monoliths](architecture/cloud-estate.md).
+
+[![Cloud and estate: two modular monoliths](diagrams/architecture-cloud-estate.png)](architecture/cloud-estate.md)
 
 **The estate keeps working without it.** A park service on the Estate Edge Hub, a second
 and smaller modular monolith, runs admission, ride safety policies and animal-care
@@ -103,37 +137,14 @@ or an animal-care record.
 
 ---
 
-## The seven bounded contexts
-
-Defined in [ADR-002](adrs/adr-002-bounded-contexts.md) and discovered through the
-[full EventStorming model](eventstorming/01-eventstorming-by-domain-boundary.png). The
-[boundary view](eventstorming/02-domain-boundaries-event-flow.png) shows which events
-cross contexts, while the [policy view](eventstorming/03-cross-domain-policies.png) shows
-the rules connecting them.
-
-| Context | Owns |
-|---|---|
-| Attraction Catalogue | Visitor-facing descriptions and published availability |
-| Ticketing | Ticket products, purchase, payment, ticket issuance |
-| Admission and Visitor Flow | Ticket validation, gates, park and area movement, queues, occupancy |
-| Ride Operations | Ride inspections, faults, safety closure, real ride availability |
-| Animal and Enclosure Care | Animals, enclosures, feeding, inspections, cleaning, population |
-| Estate Insights and AI Decision Support | Analysis and recommendations over recorded facts |
-| Staff Tasks and Alerts | Turning policies into work for people |
-
-Ride Operations and Animal and Enclosure Care own **real** availability. The catalogue
-publishes it and cannot override a safety closure.
-
----
-
 ## How we handle AI
 
 | Question                               | Answer                                                                                                                                | Where                                                                         |
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
 | What can AI change?                    | Nothing consequential. It produces recommendations: deterministic rules and named people decide.                                      | [ADR-003](adrs/adr-003-deterministic-core-advisory-ai.md)                     |
-| How is uncertainty handled?            | Every result carries confidence, model or rule version, source-data references and creation time. Abstention is a valid result.       | [ADR-003](adrs/adr-003-deterministic-core-advisory-ai.md), FR-EI-07, FR-EI-10 |
-| How is a recommendation verified?      | A responsible staff member accepts, rejects or corrects it, and the outcome is recorded.                                              | FR-EI-08, [ADR-011](adrs/adr-011-ai-evaluation-human-review.md)               |
-| What if the provider disappears?       | Capabilities sit behind task-shaped interfaces. Provider choice is configuration. The estate keeps operating with no recommendations. | [ADR-010](adrs/adr-010-ai-orchestration.md), QA-06                            |
+| How is uncertainty handled?            | Every result carries confidence, model or rule version, source-data references and creation time. Abstention is a valid result.       | [ADR-003](adrs/adr-003-deterministic-core-advisory-ai.md), [FR-EI-07 and FR-EI-10](functional-requirements.md#6-estate-insights-and-ai-decision-support) |
+| How is a recommendation verified?      | A responsible staff member accepts, rejects or corrects it, and the outcome is recorded.                                              | [FR-EI-08](functional-requirements.md#6-estate-insights-and-ai-decision-support), [ADR-011](adrs/adr-011-ai-evaluation-human-review.md) |
+| What if the provider disappears?       | Capabilities sit behind task-shaped interfaces. Provider choice is configuration. The estate keeps operating with no recommendations. | [ADR-010](adrs/adr-010-ai-orchestration.md), [QA-06](quality-attributes.md#qa-06-evolvability) |
 | Can staff see why an alert was raised? | Yes, inputs and model or rule version, without engineering support.                                                                  | [QA-05 Explainability](quality-attributes.md#qa-05-explainability)            |
 
 Sensor observations, AI inferences, keeper decisions and confirmed diagnoses stay
@@ -152,22 +163,6 @@ Full catalogue, including what was deferred and why, in
 
 All three follow one pipeline:
 [the AI decision-support pattern](diagrams/ai-decision-support-pattern.png).
-
----
-
-## Requirements and quality attributes
-
-- **[Glossary](glossary.md)** the key terms of the ubiquitous language from
-  [ADR-001](adrs/adr-001-use-ddd.md).
-- **[Functional Requirements](functional-requirements.md)** what the system must do,
-  by bounded context, plus the cross-domain policy table.
-- **[Quality Attributes](quality-attributes.md)** eight scenarios with a measure and a
-  stated cost, and a traceability table from each attribute to the requirements, decisions
-  and diagrams that serve it.
-
-- **[AI Use Cases](ai-use-cases.md)** what each use case reads, produces, when it abstains, who reviews it, what it costs to be wrong, and how it is measured.
-
-The quality attributes also name what we deliberately did **not** optimise for.
 
 ---
 
