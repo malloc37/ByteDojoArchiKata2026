@@ -6,7 +6,7 @@ Owner: BKA
 
 ## Status
 
-Proposed
+Accepted
 
 ## Context
 
