@@ -34,7 +34,7 @@ Alternatives considered:
 Use mixed connectivity according to each Estate Device's operational needs, with MQTT as
 the common messaging transport inside the estate.
 
-![Estate connectivity tiers](../diagrams/connectivity-tiers.png)
+![Estate device connectivity](../diagrams/estate-device-connectivity.png)
 
 - Remote, battery-powered, low-data sensors use LoRaWAN. Multiple gateways provide
   coverage and avoid making one gateway the production single point of failure.
