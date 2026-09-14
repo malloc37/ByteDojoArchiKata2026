@@ -25,19 +25,23 @@ Alternatives considered:
 
 ## Decision
 
-Use Keycloak as the identity and access-management product, with one cloud instance and
-one estate-local instance.
+Use Keycloak for workforce identity and access management, with one cloud instance and
+one estate-local instance. Visitor accounts remain owned by Ticketing.
 
-- Cloud Keycloak is authoritative for visitor accounts, staff identities, roles and
-  employment status. It authenticates visitors to the web application using OpenID
-  Connect.
+- Cloud Keycloak is authoritative for staff identities, roles and employment status.
+  Ticketing remains the only store that maps a visitor account to a person
+  ([ADR-013](adr-013-privacy-consent-retention.md)); visitor data is not held in Keycloak.
 - Active staff IDs, roles and status are provisioned one way to Estate Keycloak. Staff
   enroll a separate estate-local passkey or badge credential; passwords and visitor
   accounts are never synchronized.
 - Estate Keycloak authenticates the staff application and continues issuing sessions
   from its last synchronized state during an outage.
-- Staff roles include Admission Staff, Mechanic, Zookeeper, Zookeeper Staff Manager and
-  Operations Manager. Applications enforce these permissions and retain business rules.
+- Staff roles include Catalogue Manager, Admission Staff, Mechanic, Zookeeper,
+  Zookeeper Staff Manager and Operations Manager. Applications enforce these permissions
+  and retain business rules.
+- Staff ID, role and status updates travel as versioned cache updates over the
+  estate-cloud WebSocket defined in
+  [ADR-007](adr-007-estate-cloud-sync-protocol.md).
 - An authorized local administrator can disable a staff identity during an outage.
   Cloud changes otherwise take effect after synchronization; the cache age is visible.
 - Visitors enter using signed tickets rather than an estate login

@@ -36,8 +36,8 @@ the cloud is unreachable, the estate stops. Event-driven scores five stars on fa
 tolerance, because nothing waits on anything, and one star on simplicity and domain
 partitioning: it is partitioned by flow, and an asynchronous flow is harder to follow
 than a call stack. Combined, each covers the other's weak rows. The monolith is the shape
-of each deployable. Events are the only integration, between modules and across the
-estate-cloud boundary. The cost of events is paid on the seams, not inside a module.
+of each deployable. State changes cross module boundaries as events; read-only query
+interfaces are allowed by [ADR-005](adr-005-integration-through-domain-events.md).
 
 Alternatives considered:
 
@@ -47,21 +47,26 @@ Alternatives considered:
 - Microservices. Rejected. Seven services and seven pipelines for three people.
 - Service-based. Rejected, narrowly. Closest single style, but it assumes a shared
   database and synchronous calls between services.
-- Event-driven alone. Rejected. No synchronous local core to admit a visitor.
+- Event-driven alone. Rejected. Gates can admit locally, but an event-driven style alone
+  does not define the deployable boundaries or the synchronous commands and queries
+  needed inside each operational module.
 - Service-oriented and space-based. Not rated. Not our problems.
 
 ## Decision
 
-Two modular monoliths that integrate only through domain events.
+Two modular monoliths that integrate state changes through domain events.
 
 - The cloud platform is one modular monolith with one module per context ([ADR-009](adr-009-modular-monolith.md)). It
   is the system of record.
 - The park service on the Estate Edge Hub is a second, smaller modular monolith with the
-  operational core: admission, ride safety policies, animal-care recording and the local
-  estate view. It works without the cloud. Devices reach it over MQTT ([ADR-004](adr-004-mixed-connectivity-mqtt.md)).
-- Inside a module, calls are synchronous. Between modules and between the two services,
-  the only integration is published domain events ([ADR-005](adr-005-integration-through-domain-events.md)), exchanged over one
-  WebSocket connection ([ADR-007](adr-007-estate-cloud-sync-protocol.md)). Nothing shares a database.
+  operational core: admission, ride safety policies, animal-care recording, Staff Tasks
+  and Alerts, and the local estate view. It works without the cloud. Devices reach it
+  over MQTT ([ADR-004](adr-004-mixed-connectivity-mqtt.md)).
+- Inside a module, calls are synchronous. Between modules, state changes use published
+  domain events and read-only query interfaces are permitted
+  ([ADR-005](adr-005-integration-through-domain-events.md)). Across the two services, one
+  WebSocket carries domain events up and versioned cache updates down
+  ([ADR-007](adr-007-estate-cloud-sync-protocol.md)). Nothing shares a database.
 
 See [cloud and estate](../diagrams/architecture-cloud-estate.png).
 
@@ -69,8 +74,8 @@ See [cloud and estate](../diagrams/architecture-cloud-estate.png).
 
 - Fault tolerance. The park service is an availability boundary. An outage delays
   events; it does not block work.
-- Simplicity and cost. Two deployables, two pipelines. The event log is the only
-  infrastructure the combination adds.
+- Simplicity and cost. Two application deployables and two pipelines, plus the local
+  broker, WebSocket synchronization and identity providers required by other decisions.
 - Domain partitioning. Modules are the contexts from [ADR-002](adr-002-bounded-contexts.md), and a module can leave
   the cloud platform as a deployment change ([QA-06](../quality-attributes.md#qa-06-evolvability)).
 - Testability suffers. Two logs and asynchronous delivery make one visit harder to follow

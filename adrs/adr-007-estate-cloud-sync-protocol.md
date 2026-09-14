@@ -12,8 +12,10 @@ Proposed
 
 The park service records admissions, faults, inspections and animal care while the
 internet may be down for hours ([QA-01](../quality-attributes.md#qa-01-availability)). Everything it records must reach the cloud, the
-system of record. Signing keys, rules and daily plans must reach the estate ([ADR-006](adr-006-policies-execute-at-edge.md),
-[ADR-008](adr-008-signed-offline-ticket-validation.md)). No event may be lost or applied twice ([QA-03](../quality-attributes.md#qa-03-integrity)), the estate never waits on the
+system of record. Signing keys, rules, daily plans and staff identity-role updates must
+reach the estate ([ADR-006](adr-006-policies-execute-at-edge.md),
+[ADR-008](adr-008-signed-offline-ticket-validation.md),
+[ADR-012](adr-012-identity-authorization-attribution.md)). No event may be lost or applied twice ([QA-03](../quality-attributes.md#qa-03-integrity)), the estate never waits on the
 cloud, and an outage must end without manual repair. Devices use MQTT ([ADR-004](adr-004-mixed-connectivity-mqtt.md)); this
 record covers the park-to-cloud link only.
 
@@ -36,8 +38,10 @@ up and cache updates down, with the same checkpoint scheme in both directions.
 - The cloud persists each event, assigns the authoritative position, deduplicates by
   event ID and acknowledges the highest sequence persisted. Acknowledgements are
   cumulative; the park service stores the last one and prunes only below it.
-- Cache updates flow down the same way with a cloud-assigned sequence. Each rule set
-  carries its version ([ADR-006](adr-006-policies-execute-at-edge.md)).
+- Cache updates flow down the same way with a cloud-assigned sequence. Rule sets and
+  staff identity-role data carry their versions
+  ([ADR-006](adr-006-policies-execute-at-edge.md),
+  [ADR-012](adr-012-identity-authorization-attribution.md)).
 - When the connection drops, the park service keeps serving the estate. Pending events
   live in its local database, so the buffer is bounded by disk. On reconnect both sides
   resume from the last acknowledged sequence.

@@ -49,7 +49,7 @@ estate platform.
 ## Consequences
 
 - The provider handles sensitive card data, fraud controls and most payment-compliance
-  concerns, reducing—but not eliminating—the estate's compliance obligations.
+  concerns, reducing but not eliminating the estate's compliance obligations.
 - Idempotency and verified callbacks prevent ordinary retries from producing duplicate
   charges or tickets.
 - Checkout availability and supported payment methods depend on one external provider.
