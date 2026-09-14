@@ -31,15 +31,6 @@ Driving characteristics:
 Safety and scalability are not drivers. No style provides safety ([ADR-003](adr-003-deterministic-core-advisory-ai.md)), and 15,000
 visitors a day is not a load problem ([QA-07](../quality-attributes.md#qa-07-performance-and-scale)).
 
-The framed rows, stars out of five:
-
-| Characteristic | Layered | Modular monolith | Microkernel | Microservices | Service-based | Service-oriented | Event-driven | Space-based |
-|---|---|---|---|---|---|---|---|---|
-| Cost | 5 | 5 | 5 | 1 | 4 | 1 | 3 | 2 |
-| Domain partitioning | 1 | 5 | 5 | 5 | 5 | 1 | 1 | 5 |
-| Fault tolerance | 1 | 1 | 1 | 5 | 4 | 3 | 5 | 3 |
-| Simplicity | 5 | 5 | 4 | 1 | 3 | 1 | 1 | 1 |
-
 On those rows the two chosen styles are mirror images. The modular monolith scores five
 stars on cost, domain partitioning and simplicity, and one star on fault tolerance: when
 the cloud is unreachable, the estate stops. Event-driven scores five stars on fault
