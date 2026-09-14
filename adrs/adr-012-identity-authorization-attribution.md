@@ -31,6 +31,9 @@ one estate-local instance. Visitor accounts remain owned by Ticketing.
 - Cloud Keycloak is authoritative for staff identities, roles and employment status.
   Ticketing remains the only store that maps a visitor account to a person
   ([ADR-013](adr-013-privacy-consent-retention.md)); visitor data is not held in Keycloak.
+- Visitors sign in to the visitor website through Ticketing, against the account store it
+  owns ([ADR-013](adr-013-privacy-consent-retention.md)). A visitor account is only needed
+  to buy and retrieve tickets (FR-TK-05). Keycloak plays no part in it.
 - Active staff IDs, roles and status are provisioned one way to Estate Keycloak. Staff
   enroll a separate estate-local passkey or badge credential; passwords and visitor
   accounts are never synchronized.

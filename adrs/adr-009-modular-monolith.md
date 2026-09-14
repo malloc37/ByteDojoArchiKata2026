@@ -21,7 +21,7 @@ Alternatives considered:
 
 The cloud platform is one deployable application with one module per bounded context.
 
-- Modules do not share database tables. A module reads another module's data only through its published domain events or an explicit interface. See ADR-005.
+- Modules do not share database tables. A state change reaches another module only as a published domain event. A module may read another module's data through a read-only query interface. See [ADR-005](adr-005-integration-through-domain-events.md).
 - A module is extracted into a separate deployment only with a concrete scaling, ownership or reliability reason, recorded in a new ADR.
 
 The park service on the Estate Edge Hub is a separate deployment for a stated reliability reason: it must run when the cloud is unreachable. [ADR-016](adr-016-architecture-style.md) records it as a second, smaller modular monolith.

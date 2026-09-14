@@ -25,8 +25,9 @@ Alternatives considered:
 
 ## Decision
 
-Events are the primary record on both sides and the only way one context learns what
-another did.
+Events are the primary record on both sides and the only way a state change in one
+context reaches another. A context may read another context's current state through a
+read-only query interface.
 
 - Each service keeps an append-only event log. Module state, the local estate view and
   AI inputs are projections and can be rebuilt from it.
@@ -37,7 +38,7 @@ another did.
   [ADR-003](adr-003-deterministic-core-advisory-ai.md) requires.
 - Delivery is at least once. Consumers are idempotent by event ID; cloud ingestion
   deduplicates and stores ingestion time next to occurrence time ([QA-03](../quality-attributes.md#qa-03-integrity)).
-- A module may expose a read-only query interface. Commands cross a boundary only as a
+- A read-only query interface never changes state. Commands cross a boundary only as a
   policy reaction to an event.
 
 ## Consequences
