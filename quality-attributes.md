@@ -1,7 +1,7 @@
 # Quality Attributes
 
 These are the criteria the architecture is judged against. Functional behaviour is in
-[Functional Requirements](functional-requirements.md); the decisions that serve these
+[Functional Requirements](functional-requirements.md). The decisions that serve these
 attributes are in [adrs/](adrs).
 
 Each scenario states what happens, what we measure, and what the choice costs. Numbers
@@ -33,7 +33,7 @@ distributed like an application rather than treated as a buffer.
 produces a high-confidence animal anomaly.
 
 **Response.** The fault closes the ride through a deterministic policy running at the Edge
-Hub. The anomaly creates an inspection task for a keeper; it never changes a ride, a gate
+Hub. The anomaly creates an inspection task for a keeper. It never changes a ride, a gate
 or a care record.
 
 **Measure.** No path exists by which an AI output issues a command that changes payments,
@@ -122,8 +122,8 @@ streams estate events to the cloud over one connection with cumulative acknowled
 so no gate ever waits on a cloud round trip.
 
 **Measure.** Gate validation completes within **1 second** at the gate, with no cloud round
-trip. *Proposed.* 15,000 visitors per day is not a scale driver for the cloud application;
-a separate deployment needs evidence, not growth alone.
+trip. *Proposed.* 15,000 visitors per day is not a scale driver for the cloud application.
+A separate deployment needs evidence, not growth alone.
 
 **Cost.** During an outage the cloud lags the estate until the stream has caught up.
 Reporting is eventually correct, not live.
@@ -135,7 +135,7 @@ Reporting is eventually correct, not live.
 **Scenario.** Someone copies a valid ticket and presents it at a second gate during an
 outage. Separately, an unknown device attempts to publish events.
 
-**Response.** Tickets are signed, not secret; the gate verifies the signature with a cached
+**Response.** Tickets are signed, not secret. The gate verifies the signature with a cached
 public key and applies cached eligibility rules. Devices and staff actions are
 attributable.
 
@@ -145,8 +145,9 @@ Every consequential action records which person or device performed it and when.
 **Cost.** Offline verification cannot detect reuse across disconnected gates. That is a
 business risk to be bounded, not a cryptography problem.
 
-**Open.** The duplicate-ticket policy and the identity and authorization model are not
-decided.
+**Open.** Duplicate use at isolated gates is decided: admit, then resolve after
+synchronization ([ADR-008](adrs/adr-008-signed-offline-ticket-validation.md)). Offline staff sign-in through an estate identity provider is
+proposed and still has to be proven ([ADR-012](adrs/adr-012-identity-authorization-attribution.md)).
 
 ---
 
@@ -167,7 +168,7 @@ decided.
 
 - **Low latency of AI recommendations.** People review consequential findings, so minutes
   are acceptable.
-- **Live cloud reporting during an outage.** Catching up after reconnect is enough;
-  correctness matters more than freshness.
+- **Live cloud reporting during an outage.** Catching up after reconnect is enough.
+  Correctness matters more than freshness.
 - **Horizontal scalability of the cloud application.** 15,000 visitors per day does not
   require it, and a modular monolith can be split later.

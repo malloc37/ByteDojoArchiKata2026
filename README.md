@@ -44,24 +44,29 @@ matters was waiting on a model.
 |---|---|---|
 | 1 | [System context](diagrams/context-estate.png) | Who uses the estate, and the one boundary that matters: cloud vs estate |
 | 2 | [ADR-003, deterministic core with advisory AI](adrs/adr-003-deterministic-core-advisory-ai.md) | The decision everything else follows from |
-| 3 | [Cloud authority with estate continuity](diagrams/architecture-cloud-estate.png) | How the estate keeps working when the cloud does not |
+| 3 | [Cloud and estate, two modular monoliths](diagrams/architecture-cloud-estate.png) | How the estate keeps working when the cloud does not |
 | 4 | [ADR-016, architecture style](adrs/adr-016-architecture-style.md) | Which styles we compared, against which characteristics, and why two services |
 
 ---
 
 ## How it works
 
-**The cloud is the authoritative system of record.** It holds long-term records and event
-history, serves the visitor website, and runs the business services for all seven domains.
+**The cloud platform is the authoritative system of record.** It is one modular monolith
+with a module per bounded context. It keeps the authoritative event log and serves the
+visitor website.
 
-**The estate keeps working without it.** An Estate Edge Hub holds a small cache of signing
-keys, validation rules and daily plans, plus a lightweight local database of current state
-and pending events. Gates verify signed tickets offline against a cached public key.
+**The estate keeps working without it.** A park service on the Estate Edge Hub, a second
+and smaller modular monolith, runs admission, ride safety policies and animal-care
+recording from its own local event log and a small cache of signing keys, validation
+rules and daily plans. Gates verify signed tickets offline against a cached public key.
 Deterministic safety policies, such as *a ride with a safety fault cannot operate*, execute
-at the edge so they survive an outage ([ADR-006](adrs/adr-006-policies-execute-at-edge.md)).
+at the edge so they survive an outage ([ADR-006](adrs/adr-006-policies-execute-at-edge.md),
+[ADR-016](adrs/adr-016-architecture-style.md)).
 
-**Events flow one way out, a small cache flows one way in.** Locally captured events stay
-pending until the cloud acknowledges them. Ingestion deduplicates by event ID, so a retry
+**Events go up and a small cache comes down, over one WebSocket connection.** Locally
+captured events stay pending until the cloud acknowledges them, and both sides resume
+from the last acknowledgement after an outage
+([ADR-007](adrs/adr-007-estate-cloud-sync-protocol.md)). Ingestion deduplicates by event ID, so a retry
 or an at-least-once redelivery never creates a duplicate charge, ticket or business event.
 
 **AI consumes recorded facts and returns recommendations.** It produces anomaly alerts,
@@ -78,8 +83,8 @@ Each is a `.drawio` source with a rendered `.png` beside it.
 | Diagram | Shows |
 |---|---|
 | [System context](diagrams/context-estate.png) | Actors, the platform boundary, and the two external systems we depend on |
-| [Cloud and estate](diagrams/architecture-cloud-estate.png) | Containers on both sides of the boundary and what crosses it |
-| [Connectivity tiers](diagrams/connectivity-tiers.png) | One link type per job (Ethernet/PoE, Wi-Fi, LoRaWAN/Thread) and why |
+| [Cloud and estate](diagrams/architecture-cloud-estate.png) | Both modular monoliths, their modules, and the WebSocket connection between them |
+| [Connectivity tiers](diagrams/connectivity-tiers.png) | One link type per job (Ethernet/PoE, Wi-Fi, LoRaWAN) and why |
 | [EventStorming by domain boundary](eventstorming/01-eventstorming-by-domain-boundary.png) | The full domain model, mapped to the seven bounded contexts |
 | [Domain boundaries and event flow](eventstorming/02-domain-boundaries-event-flow.png) | Which events cross which boundary |
 | [Cross-domain policies](eventstorming/03-cross-domain-policies.png) | Every policy, with the owning boundary on each side |
@@ -188,9 +193,9 @@ The quality attributes also name what we deliberately did **not** optimise for.
 We have kept open questions visible rather than presenting them as settled:
 
 - The longest outage the estate must bridge, and how the estate and the cloud authenticate each other ([ADR-007](adrs/adr-007-estate-cloud-sync-protocol.md)).
-- How long a gate may run offline, and the acceptable duplicate-ticket risk ([ADR-008](adrs/adr-008-signed-offline-ticket-validation.md)).
+- The maximum age of a gate's cached keys and rules ([ADR-008](adrs/adr-008-signed-offline-ticket-validation.md)). Duplicate use at isolated gates is decided: admit, then resolve after synchronization.
 - Retention periods for visitor data, proposed but not agreed ([ADR-013](adrs/adr-013-privacy-consent-retention.md)).
-- The identity and authorization model ([ADR-012](adrs/adr-012-identity-authorization-attribution.md)).
+- Whether one-way staff provisioning and offline staff sign-in work in practice ([ADR-012](adrs/adr-012-identity-authorization-attribution.md)).
 - Whether Ticketing becomes its own cloud service ([ADR-016](adrs/adr-016-architecture-style.md)).
 - The acceptance threshold at which an AI use case may leave full human review ([ADR-011](adrs/adr-011-ai-evaluation-human-review.md)). The use cases themselves are chosen in [ADR-015](adrs/adr-015-first-release-ai-use-cases.md).
 

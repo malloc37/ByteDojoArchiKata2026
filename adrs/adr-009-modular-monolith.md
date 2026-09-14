@@ -24,7 +24,7 @@ The cloud platform is one deployable application with one module per bounded con
 - Modules do not share database tables. A module reads another module's data only through its published domain events or an explicit interface. See ADR-005.
 - A module is extracted into a separate deployment only with a concrete scaling, ownership or reliability reason, recorded in a new ADR.
 
-The Estate Edge Hub is a separate deployment for a stated reliability reason: it must run when the cloud is unreachable.
+The park service on the Estate Edge Hub is a separate deployment for a stated reliability reason: it must run when the cloud is unreachable. [ADR-016](adr-016-architecture-style.md) records it as a second, smaller modular monolith.
 
 ## Consequences
 

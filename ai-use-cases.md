@@ -46,11 +46,11 @@ records. The model never produces a diagnosis.
 
 **Cost of being wrong.** A missed anomaly means a late detection, which is why it is not
 the only safety net. The deterministic overdue-feeding rule (FR-AE-11) and scheduled keeper
-rounds run without AI. A false alarm costs keeper time, which is why precision is the
-threshold we tune.
+rounds run without AI. A false alarm costs keeper time, but a missed anomaly costs more,
+so the threshold favours recall over precision ([ADR-011](adrs/adr-011-ai-evaluation-human-review.md)).
 
-**Measured by.** Precision and recall against keeper-confirmed outcomes on the ground-truth
-set, plus the share of alerts a keeper accepts.
+**Measured by.** Recall first, then precision, against keeper-confirmed outcomes on the
+golden set, plus the share of alerts a keeper accepts.
 
 ---
 
@@ -158,7 +158,7 @@ consent model exists is the fastest way to turn a nice feature into a regulatory
 | Input | Recorded facts only. Never another model's unreviewed output. |
 | Output | A recommendation record with confidence, model or rule version, source events and creation time. |
 | Uncertainty | Abstention is a valid result and is recorded. |
-| Authority | A person or a deterministic rule decides. The model never commands. |
+| Authority | A person or a deterministic rule decides. The model never commands. Review starts in full and may relax to sampling once a use case earns it, never for the actions ADR-003 protects ([ADR-011](adrs/adr-011-ai-evaluation-human-review.md)). |
 | Degradation | If the provider is unavailable, the use case produces nothing and estate operations are unaffected. |
-| Evaluation | Scored against a ground-truth set before release and monitored after. See [ADR-011](adrs/adr-011-ai-evaluation-human-review.md). |
+| Evaluation | Scored against a golden set before release and monitored after. See [ADR-011](adrs/adr-011-ai-evaluation-human-review.md). |
 | Provenance | Sensor observation, AI inference, keeper decision and confirmed diagnosis stay separately identifiable (FR-AE-09). |
