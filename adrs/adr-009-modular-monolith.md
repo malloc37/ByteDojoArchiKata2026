@@ -28,7 +28,7 @@ The park service on the Estate Edge Hub is a separate deployment for a stated re
 
 ## Consequences
 
-- One pipeline, one runtime, one place to debug. This matches the team size and the timeline.
+- One pipeline, one runtime, one place to debug.
 - 15,000 visitors per day is not a scale problem for a single application, so the decision is not load-driven and should be revisited on evidence, not on growth alone.
 - Module isolation is a discipline, not a deployment guarantee. It needs review to hold.
 - Because integration is already event-based, extracting a module later is a deployment change rather than a redesign.
