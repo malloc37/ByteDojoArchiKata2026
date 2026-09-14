@@ -23,8 +23,9 @@ The cloud platform is one deployable application with one module per bounded con
 
 - Modules do not share database tables. A state change reaches another module only as a published domain event. A module may read another module's data through a read-only query interface. See [ADR-005](adr-005-integration-through-domain-events.md).
 - A module is extracted into a separate deployment only with a concrete scaling, ownership or reliability reason, recorded in a new ADR.
+- A bounded context may have a module in both deployables, serving different use cases. The park service module is the local working core: it takes commands, runs the policies from [ADR-006](adr-006-policies-execute-at-edge.md) and records what happened. The cloud module ingests those events and builds the projections that reporting and Estate Insights read. A rule runs in one place; the cloud does not re-run it.
 
-The park service on the Estate Edge Hub is a separate deployment for a stated reliability reason: it must run when the cloud is unreachable. [ADR-016](adr-016-architecture-style.md) records it as a second, smaller modular monolith.
+The park service on the Estate Edge Hub is a separate deployment for a stated reliability reason: it must run when the cloud is unreachable. [ADR-016](adr-016-architecture-style.md) records it as a second, smaller modular monolith holding the local working core of the operational contexts.
 
 ## Consequences
 
