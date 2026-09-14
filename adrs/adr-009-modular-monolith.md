@@ -10,11 +10,11 @@ Accepted
 
 ## Context
 
-The estate has 5,000 visitors per day and expects at least 15,000. ADR-002 defines seven bounded contexts. We are three people with limited time.
+The estate has 5,000 visitors per day and expects at least 15,000. ADR-002 defines seven bounded contexts. 
 
 Alternatives considered:
 
-- One deployable service per bounded context. Rejected. We have no scaling, ownership or reliability evidence that justifies it, and it would add distributed transactions, seven deployment pipelines and cross-service debugging to a three-person team.
+- One deployable service per bounded context. Rejected. We have no scaling, ownership or reliability evidence that justifies it, and it would add distributed transactions, seven deployment pipelines and cross-service debugging.
 - A single application with no internal boundaries. Rejected. The boundaries from ADR-002 would erode within weeks and the model would stop matching the code.
 
 ## Decision
