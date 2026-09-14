@@ -6,7 +6,7 @@ Owner: LJO
 
 ## Status
 
-Proposed
+Accepted
 
 ## Context
 
@@ -71,6 +71,8 @@ directions.
 
 - A message that fails schema validation or comes from an unauthorized sender is
   quarantined for investigation and never applied.
+- The two sides authenticate each other with the machine credentials of
+  [ADR-012](adr-012-identity-authorization-attribution.md).
 - A valid estate event is never rejected. A business conflict, such as one ticket
   claimed twice, becomes an exception task for Admission Staff (FR-AV-09), under the
   policy in [ADR-008](adr-008-signed-offline-ticket-validation.md).
@@ -83,8 +85,7 @@ directions.
 | Animal care records and population counts | Staff identities and roles |
 | Tasks and their outcomes | AI findings, rule sets and signing keys |
 
-Still open: the longest outage the local database must hold ([QA-01](../quality-attributes.md#qa-01-availability) proposes 4 hours),
-and how the two sides authenticate each other ([ADR-012](adr-012-identity-authorization-attribution.md)).
+Still open: the longest outage the local database must hold ([QA-01](../quality-attributes.md#qa-01-availability) proposes 4 hours).
 
 ## Consequences
 
