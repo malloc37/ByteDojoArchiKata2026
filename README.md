@@ -1,3 +1,6 @@
+![Byte Dojo Team](./assets/byte-dojo-team.png)
+
+
 # Von Digitalis Estate
 
 **Build a dependable estate platform first. Add AI around it to detect patterns and
