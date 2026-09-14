@@ -17,7 +17,6 @@ insights in the cloud.**
   - [Architecture style](adrs/adr-016-architecture-style.md)
 - [How it works](#how-it-works)
 - [How we handle AI](#how-we-handle-ai)
-- [Open decisions](#open-decisions)
 - [Known limitations](#known-limitations)
 - [Repository layout](#repository-layout)
 
@@ -169,21 +168,6 @@ Full catalogue, including what was deferred and why, in
 All three follow one pipeline:
 [the AI decision-support pattern](diagrams/ai-decision-support-pattern.png)
 ([editable source](diagrams/ai-decision-support.drawio)).
-
----
-
-## Open decisions
-
-We have kept open questions visible rather than presenting them as settled:
-
-- The longest outage the estate must bridge, and how the estate and the cloud authenticate each other ([ADR-007](adrs/adr-007-estate-cloud-sync-protocol.md)).
-- Retention periods for visitor data, proposed but not agreed ([ADR-013](adrs/adr-013-privacy-consent-retention.md)).
-- Whether one-way staff provisioning and offline staff sign-in work in practice ([ADR-012](adrs/adr-012-identity-authorization-attribution.md)).
-- The cloud provider whose model platform hosts the AI models, the retry limit for invalid structured output, and how long long-running process records are kept ([ADR-010](adrs/adr-010-ai-orchestration.md)).
-- The acceptance threshold at which an AI use case may leave full human review ([ADR-011](adrs/adr-011-ai-evaluation-human-review.md)). The use cases themselves are chosen in [ADR-015](adrs/adr-015-first-release-ai-use-cases.md).
-
-Red stickies on the [EventStorming model](eventstorming/01-eventstorming-by-domain-boundary.png)
-mark these in place, alongside the key business moments.
 
 ---
 
