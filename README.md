@@ -161,12 +161,13 @@ Full catalogue, including what was deferred and why, in
 
 | Use case | Solves | Targeted view |
 |---|---|---|
-| Animal health anomaly detection | Sick animals are expensive | [diagram](diagrams/ai-animal-health.png) |
-| Crowd forecasting and staffing | Where to invest and deploy staff | [diagram](diagrams/ai-crowd-staffing.png) |
-| Visitor itinerary recommendation | Growing visitor numbers | [diagram](diagrams/ai-visitor-itinerary.png) |
+| Animal health anomaly detection | Sick animals are expensive | [process and diagram](architecture/ai-animal-health.md) |
+| Crowd forecasting and staffing | Where to invest and deploy staff | [process and diagram](architecture/ai-crowd-staffing.md) |
+| Visitor itinerary recommendation | Growing visitor numbers | [process and diagram](architecture/ai-visitor-itinerary.md) |
 
 All three follow one pipeline:
-[the AI decision-support pattern](diagrams/ai-decision-support-pattern.png).
+[the AI decision-support pattern](diagrams/ai-decision-support-pattern.png)
+([editable source](diagrams/ai-decision-support.drawio)).
 
 ---
 
