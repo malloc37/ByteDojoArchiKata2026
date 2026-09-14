@@ -16,5 +16,7 @@ actual outcome.
 - **Validation:** prioritize recall, then precision, against keeper-confirmed outcomes.
 
 See [the complete use-case definition](../ai-use-cases.md#uc-1-animal-health-anomaly-detection),
-[ADR-003](../adrs/adr-003-deterministic-core-advisory-ai.md) and
-[ADR-011](../adrs/adr-011-ai-evaluation-human-review.md).
+[ADR-003](../adrs/adr-003-deterministic-core-advisory-ai.md),
+[ADR-011](../adrs/adr-011-ai-evaluation-human-review.md),
+[ADR-017](../adrs/adr-017-ai-model-approach-and-confidence.md) and the
+[task delivery sequence](../diagrams/ai-task-delivery.png).

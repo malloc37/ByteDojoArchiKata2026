@@ -23,7 +23,8 @@ Driving characteristics:
 
 - Fault tolerance. Admission, ride safety and animal care continue without the cloud
   ([QA-01](../quality-attributes.md#qa-01-availability), [QA-02](../quality-attributes.md#qa-02-safety)).
-- Simplicity and cost. Three people build and run it ([ADR-009](adr-009-modular-monolith.md)).
+- Simplicity and cost. *Assumption:* a small team of about three builds and runs the first
+  release ([ADR-009](adr-009-modular-monolith.md)). The brief does not say who builds or operates the system.
 - Domain partitioning. [ADR-002](adr-002-bounded-contexts.md) cut the system into seven contexts. The style must
   not cut across them.
 
@@ -74,8 +75,11 @@ See [cloud and estate](../diagrams/architecture-cloud-estate.png).
 
 - Fault tolerance. The park service is an availability boundary. An outage delays
   events; it does not block work.
-- Simplicity and cost. Two application deployables and two pipelines, plus the local
-  broker, WebSocket synchronization and identity providers required by other decisions.
+- Simplicity and cost. Two application deployables and two pipelines. The operational work
+  is larger than that suggests: the Edge Hub hardware, the local MQTT broker and LoRaWAN
+  Network Server, two identity-provider instances, event-log snapshots and replay
+  tooling, and the upkeep of AI models and their evaluation sets. If the estate has no team
+  for this, some of it has to be bought as a managed service.
 - Domain partitioning. Modules are the contexts from [ADR-002](adr-002-bounded-contexts.md), and a module can leave
   the cloud platform as a deployment change ([QA-06](../quality-attributes.md#qa-06-evolvability)).
 - Testability suffers. Two logs and asynchronous delivery make one visit harder to follow

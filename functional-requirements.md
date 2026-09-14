@@ -30,6 +30,7 @@ These requirements describe what the Von Digitalis Estate system must do. Safety
 - **FR-TK-04:** The system issues unique tickets only after payment confirmation.
 - **FR-TK-05:** A visitor can retrieve the tickets from a completed purchase.
 - **FR-TK-06:** The system records payment and ticket status without creating duplicate charges or tickets when a request is retried.
+- **FR-TK-07:** A family pass is one purchase that issues one signed ticket per family member. Each ticket admits one person once.
 
 ## 3. Admission and Visitor Flow
 
@@ -63,7 +64,7 @@ These requirements describe what the Von Digitalis Estate system must do. Safety
 - **FR-AE-03:** A Zookeeper can inspect an animal and record observable health information.
 - **FR-AE-04:** A Zookeeper can inspect and clean an enclosure and record completion.
 - **FR-AE-05:** Estate Devices can report environmental measurements and animal activity.
-- **FR-AE-06:** The system records enclosure population measurements and changes, including jumping piranha population counts.
+- **FR-AE-06:** A Zookeeper can record an enclosure population count, including the scheduled jumping piranha spot count. Camera counts are recorded separately as sensor observations.
 - **FR-AE-07:** Authorized staff can close or reopen an enclosure to visitors.
 - **FR-AE-08:** Animal and Enclosure Care publishes enclosure status changes to the Attraction Catalogue.
 - **FR-AE-09:** The system keeps sensor observations, AI inferences, keeper decisions, and confirmed diagnoses distinguishable.
@@ -82,6 +83,8 @@ These requirements describe what the Von Digitalis Estate system must do. Safety
 - **FR-EI-08:** A responsible staff member can accept, reject, or correct an AI recommendation and record the outcome.
 - **FR-EI-09:** Essential ticketing, admission, ride-safety, and animal-care functions continue when AI services are unavailable.
 - **FR-EI-10:** The system can return no recommendation when confidence is insufficient, and records the abstention.
+- **FR-EI-11:** The system can count the jumping piranha population from edge camera images, track the trend per tank, and ask the Zookeeper Staff Manager to check a tank that leaves its configured healthy range.
+- **FR-EI-12:** A visitor can leave anonymous post-visit feedback per attraction, and the system can summarize recurring feedback themes per attraction for the Operations Manager.
 
 ## 7. Staff Tasks and Alerts
 
@@ -92,6 +95,9 @@ These requirements describe what the Von Digitalis Estate system must do. Safety
 
 ## Cross-Domain Policies
 
+Where each policy runs, at the gate, the Estate Edge Hub or the cloud, is recorded in
+[ADR-006](adrs/adr-006-policies-execute-at-edge.md).
+
 | Triggering event          | Policy                                         | Resulting command                 |
 | ------------------------- | ---------------------------------------------- | --------------------------------- |
 | Ticket Purchased          | A confirmed purchase requires ticket issuance  | Issue Ticket                      |
@@ -99,7 +105,7 @@ These requirements describe what the Von Digitalis Estate system must do. Safety
 | Ride Fault Detected       | A ride with a safety fault cannot operate      | Close Ride and Request Inspection |
 | Ride Inspection Completed | A ride reopens only after a successful result  | Open Ride                         |
 | Animal Feeding Overdue    | A missed feeding requires attention            | Create Keeper Task                |
-| Animal Anomaly Detected   | Consequential AI findings require human review | Request Animal Inspection         |
+| Animal Anomaly Detected or Population Out Of Range | Consequential AI findings require human review | Request Animal Inspection or Population Check |
 | Area Capacity Exceeded    | Operations must respond to crowding            | Notify Operations Manager         |
 
 ## Assumptions

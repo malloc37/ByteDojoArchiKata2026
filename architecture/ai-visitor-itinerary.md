@@ -14,9 +14,12 @@ ride or enclosure.
 - **Fallback:** the ordinary attraction list remains available without AI.
 - **Risk:** a poor result means a mediocre route, while the hard availability check
   protects safety.
-- **Validation:** following rate and a 100 percent pass rate for the closed-attraction
-  check.
+- **Freshness:** availability older than five minutes is shown as unknown, so the route
+  never guarantees an attraction is open.
+- **Validation:** an in-app "did you use the route?" question and a 100 percent pass rate
+  for the closed-attraction check.
 
 See [the complete use-case definition](../ai-use-cases.md#uc-3-visitor-itinerary-recommendation),
-[ADR-003](../adrs/adr-003-deterministic-core-advisory-ai.md) and
-[ADR-013](../adrs/adr-013-privacy-consent-retention.md).
+[ADR-003](../adrs/adr-003-deterministic-core-advisory-ai.md),
+[ADR-013](../adrs/adr-013-privacy-consent-retention.md) and
+[ADR-017](../adrs/adr-017-ai-model-approach-and-confidence.md).

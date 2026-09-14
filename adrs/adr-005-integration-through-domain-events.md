@@ -18,10 +18,16 @@ Alternatives considered:
 
 - Modules read each other's tables. Rejected. The boundaries erode with the first schema
   change.
-- Synchronous calls between modules. Rejected. The park service would wait on the cloud
-  ([QA-01](../quality-attributes.md#qa-01-availability)), and nothing records why something happened.
-- State per module plus an outbox. Rejected, narrowly. Two sources of truth per module,
-  and replaying history means reconstructing it from tables that have moved on.
+- Synchronous calls between the two services. Rejected. The park service would wait on
+  the cloud ([QA-01](../quality-attributes.md#qa-01-availability)).
+- Synchronous state-changing calls between modules inside one service. Rejected. They
+  would not wait on the cloud, but nothing would record why a state changed
+  ([QA-05](../quality-attributes.md#qa-05-explainability)), and a new projection such as an AI use case
+  could not read history without changing the caller. Read-only queries stay synchronous.
+- State per module plus a transactional outbox. Rejected, narrowly. An outbox stores state
+  and the pending event atomically, so it does not create two sources of truth. We chose
+  the event log because audits and new AI use cases need to replay history, which an
+  outbox no longer holds once its events are published.
 
 ## Decision
 
@@ -36,7 +42,8 @@ read-only query interface.
 - Every event carries a stable event ID, occurrence time, producer and schema version.
   Policy outcomes carry the policy version ([ADR-006](adr-006-policies-execute-at-edge.md)). AI results carry the fields
   [ADR-003](adr-003-deterministic-core-advisory-ai.md) requires.
-- Delivery is at least once. Consumers are idempotent by event ID; cloud ingestion
+- Delivery is at least once. Consumers are idempotent by event ID: a consumer records the
+  processed event ID in the same transaction as the state change it causes. Cloud ingestion
   deduplicates and stores ingestion time next to occurrence time ([QA-03](../quality-attributes.md#qa-03-integrity)).
 - A read-only query interface never changes state. Commands cross a boundary only as a
   policy reaction to an event.

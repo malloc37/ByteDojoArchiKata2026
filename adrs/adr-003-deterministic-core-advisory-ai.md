@@ -10,7 +10,7 @@ Accepted
 
 ## Context
 
-The estate must keep selling tickets, admitting visitors, closing unsafe rides and recording animal care when the internet, the cloud or an AI provider is unavailable. AI is also a required part of this challenge.
+The estate must keep admitting visitors with tickets already issued, closing unsafe rides and recording animal care when the internet, the cloud or an AI provider is unavailable. Selling new tickets online needs the cloud and the payment provider, and pauses during an internet outage ([ADR-014](adr-014-payment-provider.md)). AI is also a required part of this challenge.
 
 Alternatives considered:
 

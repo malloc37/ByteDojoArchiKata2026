@@ -15,5 +15,6 @@ recommendation; otherwise it abstains. The Operations Manager decides whether to
 - **Validation:** forecast error by area and recommendation acceptance rate.
 
 See [the complete use-case definition](../ai-use-cases.md#uc-2-crowd-forecasting-and-staffing),
-[ADR-006](../adrs/adr-006-policies-execute-at-edge.md) and
-[ADR-011](../adrs/adr-011-ai-evaluation-human-review.md).
+[ADR-006](../adrs/adr-006-policies-execute-at-edge.md),
+[ADR-011](../adrs/adr-011-ai-evaluation-human-review.md) and
+[ADR-017](../adrs/adr-017-ai-model-approach-and-confidence.md).

@@ -27,13 +27,21 @@ Alternatives considered:
 
 Events are anonymous. Personal data lives in one place, linked by opaque identifiers.
 
-- No domain event carries a name, e-mail address, payment detail or device identifier.
-  Events carry ticket IDs and, where a purchase needs it, an account ID.
+- No domain event carries a name, e-mail address, payment detail or visitor device
+  identifier, such as a phone's hardware or advertising ID. Events carry ticket IDs and,
+  where a purchase needs it, an account ID.
+- Operational device identities, such as a gate or sensor ID, are allowed. They identify
+  estate equipment, not people ([ADR-008](adr-008-signed-offline-ticket-validation.md),
+  [ADR-012](adr-012-identity-authorization-attribution.md)).
 - The account store in the cloud, owned by Ticketing, is the only place that maps an
   account ID to a person. Deleting a visitor deletes that record; the events stay and
   belong to nobody.
 - Visitor-flow analysis and crowd forecasting work on counts ([QA-04](../quality-attributes.md#qa-04-privacy)). No
   re-identification across visits, no device tracking.
+- Post-visit feedback (UC-8) is submitted without an account. Personal details a visitor
+  types, such as a name or e-mail address, are removed before the text is stored or sent
+  to a model.
+- Cameras over the piranha tanks (UC-7) publish only counts. Frames never leave the camera.
 - Consent is per purpose and recorded as an event. Itinerary preferences (UC-3) and
   return-visit offers (UC-6) each need their own. Without consent the app shows the plain
   attraction list.
@@ -47,6 +55,7 @@ Retention, *proposed*:
 | Ticket and validation events | Ticket ID only | Contract | Kept; unlinkable once the account is gone |
 | Movement and queue counts | No | None needed | Indefinite |
 | Itinerary preferences | Session only | Consent | End of the visit day |
+| Post-visit feedback | No, once personal details are removed | Legitimate interest | 2 years |
 | Return-visit profile | Yes | Consent | Until withdrawal; not built before UC-6 |
 | Staff attribution | Staff | Employment | Per employer rules ([ADR-012](adr-012-identity-authorization-attribution.md)) |
 

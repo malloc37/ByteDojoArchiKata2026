@@ -13,7 +13,8 @@ Proposed
 [ADR-003](adr-003-deterministic-core-advisory-ai.md) makes AI advisory and [ADR-015](adr-015-first-release-ai-use-cases.md) picks three use cases. Neither says where the AI
 code lives or how it reaches a model.
 
-The models run on a cloud provider's model platform, not yet chosen. Providers change
+The language models run on a cloud provider's model platform, not yet chosen. The vision
+model for UC-7 runs on the edge camera instead ([ADR-017](adr-017-ai-model-approach-and-confidence.md)). Providers change
 models and APIs on their own schedule, and [QA-06](../quality-attributes.md#qa-06-evolvability) requires that a provider or model change
 touches no domain module. Most AI work is one event in and one recommendation out, but an
 overnight anomaly scan or a forecast run can outlive a restart.
@@ -42,7 +43,8 @@ monolith that reaches models only through swappable adapters.
   `Requested`, `Running`, `Completed` or `Failed` and resumes it after a restart.
 - Each use case has a task-shaped port, for example detect animal anomaly. One adapter per
   provider or model implements it. Adapter, model, prompt version and confidence
-  threshold are configuration.
+  threshold are configuration. The non-LLM baseline from ADR-017 is an adapter behind the
+  same port, so falling back to it is a configuration change.
 - Models return structured output. Output that fails the schema is retried up to a limit,
   then the use case abstains. An abstention records its reason, invalid output, low
   confidence or incomplete input window, so [ADR-011](adr-011-ai-evaluation-human-review.md)

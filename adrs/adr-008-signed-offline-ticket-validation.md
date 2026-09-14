@@ -34,6 +34,8 @@ digital signature.
 
 - The private signing key remains in the cloud. Gates receive the corresponding public
   verification keys and admission rules in advance through the Estate Edge Hub.
+- A family pass is one purchase that issues one signed ticket per family member. Each
+  ticket is validated and claimed once like any other, so gates need no group rule.
 - A gate verifies the signature and applies its cached rules locally. Before opening, it
   atomically claims the ticket ID in the shared admission state on the Estate Edge Hub.
   It never waits for MQTT or the cloud.

@@ -101,11 +101,12 @@ versioning discipline for policy rules.
 is replaced.
 
 **Response.** AI capabilities sit behind task-shaped interfaces. Provider and model
-selection is configuration owned by Estate Insights. Contexts integrate through published
+selection is owned by Estate Insights. Contexts integrate through published
 domain events, so a module can later be extracted without redesign.
 
-**Measure.** Swapping the provider or rolling back a model changes **only** Estate Insights
-configuration. No domain module changes.
+**Measure.** Swapping the provider or rolling back a model changes **only** Estate Insights:
+configuration for a rollback, a new adapter for a new provider. Either ships only after
+it passes re-evaluation ([ADR-011](adrs/adr-011-ai-evaluation-human-review.md)). No domain module changes.
 
 **Cost.** One layer of indirection between the domain and the provider, and the discipline
 not to read another context's tables directly.
@@ -148,6 +149,26 @@ it does not depend on the internet or cloud. Their failure needs a manual proced
 
 **Open.** Offline staff sign-in through an estate identity provider is proposed and still
 has to be proven ([ADR-012](adrs/adr-012-identity-authorization-attribution.md)).
+
+---
+
+## Failure modes
+
+QA-01 covers the internet outage. Patchy Wi-Fi and local equipment fail too. For each
+failure: what keeps working, what pauses, how people find out, and how it recovers.
+
+| Failure | Keeps working | Pauses | How people know | Recovery |
+|---|---|---|---|---|
+| Estate internet down | Admission with issued tickets, reuse checks, ride safety policies, care recording, local tasks, staff sign-in | New online ticket sales, cloud reporting, AI recommendations | The local estate view shows the cloud as offline and the time since the last sync | Synchronization resumes from the last acknowledgement ([ADR-007](adrs/adr-007-estate-cloud-sync-protocol.md)). Nothing is re-entered by hand |
+| Staff phone outside Wi-Fi coverage | The phone records care and inspections in its offline outbox | New tasks do not reach that phone, and other staff do not see its records yet | The phone shows an offline banner and the number of unsent records | The outbox sends on reconnection, deduplicated by event ID. A ride fault is reported at a fixed terminal, never only from an offline phone |
+| Estate Edge Hub down | Gates still verify signatures. Rides keep their certified physical controls | Automatic admission, all estate policies, local tasks, the local estate view, new staff sign-ins | Gates and staff phones show the hub as unreachable, and monitoring alerts the Operations Manager | Manual admission and paper care logs ([ADR-008](adrs/adr-008-signed-offline-ticket-validation.md)). A mechanic closes an unsafe ride with its physical controls. After restart, paper records are entered and marked as manual. Events the cloud has not yet acknowledged are at risk if the hub's disk is lost |
+| Estate identity provider down | Staff already signed in keep working until their session expires | New sign-ins | The staff application shows that sign-in is unavailable | Restart the service. Staff without a session use paper logs meanwhile |
+| Sensor stopped or sending stale readings | Other sensors, keeper records, the overdue-feeding rule | AI scoring for that animal or enclosure abstains, with the reason recorded | A device-health warning on the local estate view, and the abstention reason | Repair or replace the sensor. Scoring resumes once the observation window is complete |
+| Edge Hub disk full | Gates verify signatures | Treated like the Edge Hub being down for anything that must be stored | A disk alert at *proposed* 80 per cent, well before it is full | Prune the acknowledged transmission backlog. If the cloud is unreachable, add storage |
+
+Certified ride-control and safety mechanisms are outside the platform. The platform
+records faults and closures and runs its policies, but never replaces a ride's physical
+safety controls.
 
 ---
 
