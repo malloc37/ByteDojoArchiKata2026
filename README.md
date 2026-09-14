@@ -12,6 +12,23 @@ patchy. Essential operations like selling tickets, admitting visitors, closing a
 ride, recording animal care continue when the internet, the cloud or an AI provider is
 unavailable. AI does not sit in the control path.
 
+## Contents
+
+- [How AI solves the Countess's problems](#how-ai-solves-the-countesss-problems)
+- [Architecture at a glance](#architecture-at-a-glance)
+  - [System context](diagrams/context-estate.png)
+  - [Deterministic core with advisory AI](adrs/adr-003-deterministic-core-advisory-ai.md)
+  - [Cloud and estate architecture](diagrams/architecture-cloud-estate.png)
+  - [Architecture style](adrs/adr-016-architecture-style.md)
+- [How it works](#how-it-works)
+- [Diagrams](#diagrams)
+- [The seven bounded contexts](#the-seven-bounded-contexts)
+- [Architecture decisions](#architecture-decisions)
+- [How we handle AI](#how-we-handle-ai)
+- [Requirements and quality attributes](#requirements-and-quality-attributes)
+- [Open decisions](#open-decisions)
+- [Repository layout](#repository-layout)
+
 ---
 
 ## How AI solves the Countess's problems
@@ -40,7 +57,7 @@ matters was waiting on a model.
 
 ---
 
-## Start here
+## Architecture at a glance
 
 
 | # | What | Why it matters |
@@ -119,7 +136,7 @@ publishes it and cannot override a safety closure.
 
 ---
 
-## Decisions
+## Architecture decisions
 
 Short ADRs with context and alternatives, decision, and consequences.
 *Accepted* means the team agreed it. *Proposed* means it is drafted or still open. We have
@@ -191,7 +208,7 @@ The quality attributes also name what we deliberately did **not** optimise for.
 
 ---
 
-## What is not decided
+## Open decisions
 
 We have kept open questions visible rather than presenting them as settled:
 
