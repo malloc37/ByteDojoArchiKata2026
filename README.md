@@ -18,7 +18,6 @@ insights in the cloud.**
 - [How it works](#how-it-works)
 - [How we handle AI](#how-we-handle-ai)
 - [Known limitations](#known-limitations)
-- [Repository layout](#repository-layout)
 
 ---
 
@@ -187,21 +186,3 @@ All three follow one pipeline:
 - AI produces no recommendation when its provider is unavailable or its input data is
   insufficient. Essential estate operations continue without it
   ([ADR-003](adrs/adr-003-deterministic-core-advisory-ai.md)).
-
----
-
-## Repository layout
-
-```
-adrs/                 architecture decision records, plus the template
-architecture/         guided explanations of the main architecture views
-diagrams/             context, cloud/estate, connectivity (.drawio + .png), styles worksheet
-eventstorming/        digitized EventStorming model (.drawio + .png)
-ai-use-cases.md
-functional-requirements.md
-glossary.md
-quality-attributes.md
-```
-
-On the EventStorming pages, a **solid border** is a sticky note from the physical session.
-A **dashed border** was added while digitizing, to close a gap or name an implicit step.
