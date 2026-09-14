@@ -134,7 +134,7 @@ kept that distinction honest rather than marking everything accepted.
 | [013](adrs/adr-013-privacy-consent-retention.md) | Privacy, consent and retention of visitor data | Accepted |
 | [014](adrs/adr-014-payment-provider.md) | Use an external payment provider | Proposed |
 | [015](adrs/adr-015-first-release-ai-use-cases.md) | First-release AI use cases | Proposed |
-| [016](adrs/adr-016-architecture-style.md) | Architecture style: two services, event-driven inside and between them | Proposed |
+| [016](adrs/adr-016-architecture-style.md) | Architecture style: two modular monoliths, integrated only through domain events | Proposed |
 
 ---
 
@@ -189,7 +189,7 @@ We have kept open questions visible rather than presenting them as settled:
 - How long a gate may run offline, and the acceptable duplicate-ticket risk ([ADR-008](adrs/adr-008-signed-offline-ticket-validation.md)).
 - Retention periods for visitor data, proposed but not agreed ([ADR-013](adrs/adr-013-privacy-consent-retention.md)).
 - The identity and authorization model ([ADR-012](adrs/adr-012-identity-authorization-attribution.md)).
-- The three driving characteristics for the architecture style, and whether Ticketing becomes its own cloud service ([ADR-016](adrs/adr-016-architecture-style.md)).
+- Whether Ticketing becomes its own cloud service ([ADR-016](adrs/adr-016-architecture-style.md)).
 - The acceptance threshold at which an AI use case may leave full human review ([ADR-011](adrs/adr-011-ai-evaluation-human-review.md)). The use cases themselves are chosen in [ADR-015](adrs/adr-015-first-release-ai-use-cases.md).
 
 Red stickies on the [EventStorming model](eventstorming/01-eventstorming-by-domain-boundary.png)
