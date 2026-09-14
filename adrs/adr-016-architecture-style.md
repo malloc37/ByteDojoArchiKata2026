@@ -6,7 +6,7 @@ Owner: LJO
 
 ## Status
 
-Proposed
+Accepted
 
 ## Context
 
@@ -31,13 +31,22 @@ Driving characteristics:
 Safety and scalability are not drivers. No style provides safety ([ADR-003](adr-003-deterministic-core-advisory-ai.md)), and 15,000
 visitors a day is not a load problem ([QA-07](../quality-attributes.md#qa-07-performance-and-scale)).
 
+The framed rows, stars out of five:
+
+| Characteristic | Layered | Modular monolith | Microkernel | Microservices | Service-based | Service-oriented | Event-driven | Space-based |
+|---|---|---|---|---|---|---|---|---|
+| Cost | 5 | 5 | 5 | 1 | 4 | 1 | 3 | 2 |
+| Domain partitioning | 1 | 5 | 5 | 5 | 5 | 1 | 1 | 5 |
+| Fault tolerance | 1 | 1 | 1 | 5 | 4 | 3 | 5 | 3 |
+| Simplicity | 5 | 5 | 4 | 1 | 3 | 1 | 1 | 1 |
+
 On those rows the two chosen styles are mirror images. The modular monolith scores five
 stars on cost, domain partitioning and simplicity, and one star on fault tolerance: when
 the cloud is unreachable, the estate stops. Event-driven scores five stars on fault
-tolerance, because nothing waits on anything, and one star on simplicity and domain
-partitioning: it is partitioned by flow, and an asynchronous flow is harder to follow
-than a call stack. Combined, each covers the other's weak rows. The monolith is the shape
-of each deployable. State changes cross module boundaries as events; read-only query
+tolerance, because nothing waits on anything, three on cost, and one star on simplicity
+and domain partitioning: it is partitioned by flow, and an asynchronous flow is harder to
+follow than a call stack. Combined, each covers the other's weak rows. The monolith is the
+shape of each deployable. State changes cross module boundaries as events; read-only query
 interfaces are allowed by [ADR-005](adr-005-integration-through-domain-events.md).
 
 Alternatives considered:
@@ -46,8 +55,9 @@ Alternatives considered:
   cloud being unreachable from the estate.
 - Microkernel. Rejected. Same problem, and plug-ins fit a product with variants.
 - Microservices. Rejected. Seven services and seven pipelines for three people.
-- Service-based. Rejected, narrowly. Closest single style, but it assumes a shared
-  database and synchronous calls between services.
+- Service-based. Rejected, narrowly. Closest single style, with four stars on cost and
+  fault tolerance, but it assumes a shared database and synchronous calls between
+  services.
 - Event-driven alone. Rejected. Gates can admit locally, but an event-driven style alone
   does not define the deployable boundaries or the synchronous commands and queries
   needed inside each operational module.
