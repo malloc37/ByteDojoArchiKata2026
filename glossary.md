@@ -5,6 +5,7 @@ Bounded contexts are listed in [ADR-002](adrs/adr-002-bounded-contexts.md).
 
 | Term | Definition |
 |---|---|
+| **Abstention** | An AI use case returning no recommendation. Recorded with one of four reasons: invalid output, low confidence, incomplete input window or budget exhausted. |
 | **Admission** | Letting a visitor into the park after a gate has validated their ticket. |
 | **Animal** | One individual animal, registered by a keeper and assigned to an enclosure. |
 | **Area** | A part of the park where visitors are counted on entry and exit, with a capacity. |
@@ -16,10 +17,12 @@ Bounded contexts are listed in [ADR-002](adrs/adr-002-bounded-contexts.md).
 | **Estate Edge Hub** | The computer on the estate that keeps admission, safety policies and care recording running without the cloud. |
 | **Family pass** | One purchase that issues one signed ticket per family member. Each ticket admits one person. |
 | **Finding** | An AI result that needs a person. It carries an ID, provenance and an expiry, and becomes a task at the estate. |
+| **Model Provider** | The external platform that runs an AI model. Replaceable without changing any domain module. Not the Payment Provider, which processes payments. |
 | **Policy** | A deterministic rule: whenever an event happens, issue a command. |
 | **Recommendation** | AI output with confidence and source events. Advice only; a person or a policy decides. |
 | **Ride** | One of the estate's 40 historic rides. |
 | **Safety Closure** | Closing a ride or enclosure for safety. Nothing, including the catalogue, can override it. |
 | **Task** | Work for a named person or role, created by a policy. |
-| **Ticket** | A signed right to enter on one date, issued only after payment is confirmed. |
+| **Ticket** | A signed right for one person to enter the park once on one date, issued only after payment is confirmed. |
+| **Ticket Product** | What a visitor buys: an individual ticket, a family pass or a tier. |
 | **Visitor** | A person who buys tickets and visits the estate. Events never identify them. |
