@@ -6,7 +6,7 @@ Owner: MJE
 
 ## Status
 
-Proposed
+Accepted
 
 ## Context
 
@@ -32,6 +32,10 @@ Ticketing signs each issued ticket. Its QR code contains the ticket identifier a
 claims needed for admission, including validity date and ticket type, together with the
 digital signature.
 
+In the first release a ticket admits one person to the park once on one date. Area and
+ride eligibility is not a ticket claim, so gates enforce no ride rules. Duplicate use is
+a second admission of the same ticket on the same date.
+
 - The private signing key remains in the cloud. Gates receive the corresponding public
   verification keys and admission rules in advance through the Estate Edge Hub.
 - A family pass is one purchase that issues one signed ticket per family member. Each
@@ -43,9 +47,11 @@ digital signature.
   ticket ID, gate ID, occurrence time, result, reason, verification-key ID and rule
   version. It publishes the event over MQTT when connectivity is available
   ([ADR-004](adr-004-mixed-connectivity-mqtt.md)).
-- Public-key rotation uses an overlap period so gates can validate tickets signed with
-  either the current or previous key. Gates report stale keys and rules as a health
-  warning before they expire.
+- Cached keys and rules carry a validity period (*proposed*: 7 days) that must exceed the
+  longest outage [QA-01](../quality-attributes.md#qa-01-availability) requires, so an
+  outage never expires a cache. Public-key rotation uses an overlap period (*proposed*:
+  14 days) so gates can validate tickets signed with either the current or previous key.
+  Gates report stale keys and rules as a health warning before they expire.
 - The Estate Edge Hub accepts only the first valid use claim for a ticket. A later claim
   is rejected as reuse, including during an internet outage. Reliable connectivity
   between gates and the estate-local network is an assumption of this decision.
