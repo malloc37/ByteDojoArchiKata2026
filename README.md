@@ -9,14 +9,12 @@ insights in the cloud.**
 - [Introduction](#introduction)
 - [How AI solves the Countess's problems](#how-ai-solves-the-countesss-problems)
 - [Architecture at a glance](#architecture-at-a-glance)
-  - [System context](diagrams/context-estate.png)
+  - [System context](architecture/system-context.md)
   - [Deterministic core with advisory AI](adrs/adr-003-deterministic-core-advisory-ai.md)
-  - [Cloud and estate architecture](diagrams/architecture-cloud-estate.png)
+  - [Cloud and estate architecture](architecture/cloud-estate.md)
   - [Architecture style](adrs/adr-016-architecture-style.md)
 - [How it works](#how-it-works)
-- [Diagrams](#diagrams)
 - [The seven bounded contexts](#the-seven-bounded-contexts)
-- [Architecture decisions](#architecture-decisions)
 - [How we handle AI](#how-we-handle-ai)
 - [Requirements and quality attributes](#requirements-and-quality-attributes)
 - [Open decisions](#open-decisions)
@@ -69,9 +67,9 @@ matters was waiting on a model.
 
 | # | What | Why it matters |
 |---|---|---|
-| 1 | [System context](diagrams/context-estate.png) | Who uses the estate, and the one boundary that matters: cloud vs estate |
+| 1 | [System context](architecture/system-context.md) | Who uses the estate, and the one boundary that matters: cloud vs estate |
 | 2 | [ADR-003, deterministic core with advisory AI](adrs/adr-003-deterministic-core-advisory-ai.md) | The decision everything else follows from |
-| 3 | [Cloud and estate, two modular monoliths](diagrams/architecture-cloud-estate.png) | How the estate keeps working when the cloud does not |
+| 3 | [Cloud and estate, two modular monoliths](architecture/cloud-estate.md) | How the estate keeps working when the cloud does not |
 | 4 | [ADR-016, architecture style](adrs/adr-016-architecture-style.md) | Which styles we compared, against which characteristics, and why two services |
 
 ---
@@ -93,8 +91,10 @@ at the edge so they survive an outage ([ADR-006](adrs/adr-006-policies-execute-a
 **Events go up and a small cache comes down, over one WebSocket connection.** Locally
 captured events stay pending until the cloud acknowledges them, and both sides resume
 from the last acknowledgement after an outage
-([ADR-007](adrs/adr-007-estate-cloud-sync-protocol.md)). Ingestion deduplicates by event ID, so a retry
-or an at-least-once redelivery never creates a duplicate charge, ticket or business event.
+([ADR-007](adrs/adr-007-estate-cloud-sync-protocol.md)). Modules communicate state changes
+through published domain events ([ADR-005](adrs/adr-005-integration-through-domain-events.md)).
+Ingestion deduplicates by event ID, so a retry or an at-least-once redelivery never
+creates a duplicate charge, ticket or business event.
 
 **AI consumes recorded facts and returns recommendations.** It produces anomaly alerts,
 crowd forecasts and itinerary suggestions. Every consequential finding becomes a task or an
@@ -103,30 +103,13 @@ or an animal-care record.
 
 ---
 
-## Diagrams
-
-Each is a `.drawio` source with a rendered `.png` beside it.
-
-| Diagram | Shows |
-|---|---|
-| [System context](diagrams/context-estate.png) | Actors, the platform boundary, and the two external systems we depend on |
-| [Cloud and estate](diagrams/architecture-cloud-estate.png) | Both modular monoliths, their modules, and the WebSocket connection between them |
-| [Connectivity tiers](diagrams/connectivity-tiers.png) | One link type per job (Ethernet/PoE, Wi-Fi, LoRaWAN) and why |
-| [EventStorming by domain boundary](eventstorming/01-eventstorming-by-domain-boundary.png) | The full domain model, mapped to the seven bounded contexts |
-| [Domain boundaries and event flow](eventstorming/02-domain-boundaries-event-flow.png) | Which events cross which boundary |
-| [Cross-domain policies](eventstorming/03-cross-domain-policies.png) | Every policy, with the owning boundary on each side |
-| [AI decision-support pattern](diagrams/ai-decision-support-pattern.png) | The pipeline every AI use case follows |
-| [UC-1 Animal health](diagrams/ai-animal-health.png) | Anomaly detection, review path, and what happens when it is wrong |
-| [UC-2 Crowd and staffing](diagrams/ai-crowd-staffing.png) | Forecasting, review path, and the deterministic capacity policy beside it |
-| [UC-3 Visitor itinerary](diagrams/ai-visitor-itinerary.png) | Recommendation, the closed-attraction check, and the non-AI fallback |
-
-Component names describe **capability, not product**. Technology choices live in the ADRs.
-
----
-
 ## The seven bounded contexts
 
-Defined in [ADR-002](adrs/adr-002-bounded-contexts.md), discovered by EventStorming.
+Defined in [ADR-002](adrs/adr-002-bounded-contexts.md) and discovered through the
+[full EventStorming model](eventstorming/01-eventstorming-by-domain-boundary.png). The
+[boundary view](eventstorming/02-domain-boundaries-event-flow.png) shows which events
+cross contexts, while the [policy view](eventstorming/03-cross-domain-policies.png) shows
+the rules connecting them.
 
 | Context | Owns |
 |---|---|
@@ -140,33 +123,6 @@ Defined in [ADR-002](adrs/adr-002-bounded-contexts.md), discovered by EventStorm
 
 Ride Operations and Animal and Enclosure Care own **real** availability. The catalogue
 publishes it and cannot override a safety closure.
-
----
-
-## Architecture decisions
-
-Short ADRs with context and alternatives, decision, and consequences.
-*Accepted* means the team agreed it. *Proposed* means it is drafted or still open. We have
-kept that distinction honest rather than marking everything accepted.
-
-| ADR | Decision | Status |
-|---|---|---|
-| [001](adrs/adr-001-use-ddd.md) | Use Domain-Driven Design | Accepted |
-| [002](adrs/adr-002-bounded-contexts.md) | Bounded contexts and domain boundaries | Accepted |
-| [003](adrs/adr-003-deterministic-core-advisory-ai.md) | Deterministic operational core with advisory AI | Accepted |
-| [004](adrs/adr-004-mixed-connectivity-mqtt.md) | Estate device connectivity using LoRaWAN, local IP and MQTT | Proposed |
-| [005](adrs/adr-005-integration-through-domain-events.md) | Integration through published domain events | Accepted |
-| [006](adrs/adr-006-policies-execute-at-edge.md) | Cross-domain policies execute at the estate edge | Accepted |
-| [007](adrs/adr-007-estate-cloud-sync-protocol.md) | Estate-to-cloud synchronization protocol | Proposed |
-| [008](adrs/adr-008-signed-offline-ticket-validation.md) | Signed offline ticket validation | Proposed |
-| [009](adrs/adr-009-modular-monolith.md) | Start the cloud platform as a modular monolith | Accepted |
-| [010](adrs/adr-010-ai-orchestration.md) | AI orchestration behind stable interfaces | Proposed |
-| [011](adrs/adr-011-ai-evaluation-human-review.md) | AI evaluation and human review | Accepted |
-| [012](adrs/adr-012-identity-authorization-attribution.md) | Identity, authorization and attribution | Proposed |
-| [013](adrs/adr-013-privacy-consent-retention.md) | Privacy, consent and retention of visitor data | Accepted |
-| [014](adrs/adr-014-payment-provider.md) | Use an external payment provider | Proposed |
-| [015](adrs/adr-015-first-release-ai-use-cases.md) | First-release AI use cases | Proposed |
-| [016](adrs/adr-016-architecture-style.md) | Architecture style: two modular monoliths, integrated only through domain events | Proposed |
 
 ---
 
@@ -236,6 +192,7 @@ mark these in place, alongside the key business moments.
 
 ```
 adrs/                 architecture decision records, plus the template
+architecture/         guided explanations of the main architecture views
 diagrams/             context, cloud/estate, connectivity (.drawio + .png), styles worksheet
 eventstorming/        digitized EventStorming model (.drawio + .png)
 ai-use-cases.md
