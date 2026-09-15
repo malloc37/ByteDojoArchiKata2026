@@ -6,7 +6,7 @@ Owner: MJE
 
 ## Status
 
-Proposed
+Accepted
 
 ## Context
 
