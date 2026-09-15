@@ -4,12 +4,21 @@ The brief describes the Countess's goals, but not where system responsibilities 
 We used EventStorming to discover the business flow, ownership boundaries and policies
 before choosing the architecture, following [ADR-001](../adrs/adr-001-use-ddd.md).
 
+The model started as a physical workshop before we digitized and refined it into the
+three views below.
+
+| Workshop 3 | Workshop 2 | Workshop 1 |
+|---|---|---|
+| ![Physical EventStorming workshop 3](physical_eventstorming/physical_event_storming3.jpg) | ![Physical EventStorming workshop 2](physical_eventstorming/physical_event_storming2.jpg) | ![Physical EventStorming workshop 1](physical_eventstorming/physical_event_storming1.jpg) |
+
 ## 1. Map the business flow
 
 We mapped important facts such as `Ticket Issued`, `Park Entered`, `Ride Fault Detected`
 and `Animal Fed`, then added the commands, people, devices and external systems involved.
 
 ![EventStorming mapped by domain boundary](01-eventstorming-by-domain-boundary.png)
+
+[Open the editable Draw.io source](eventstorming-von-digitalis.drawio).
 
 Solid borders represent notes from the physical workshop. Dashed borders mark details
 added during digitization, keeping later assumptions visible.
@@ -42,5 +51,3 @@ policies therefore execute at the estate edge
 
 The workshop produced the language, seven boundaries, event hand-offs and policies from
 which the requirements and two-modular-monolith architecture were derived.
-
-Editable source: [eventstorming-von-digitalis.drawio](eventstorming-von-digitalis.drawio).

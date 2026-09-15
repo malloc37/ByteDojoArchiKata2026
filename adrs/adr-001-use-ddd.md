@@ -29,7 +29,8 @@ contexts where rules and ownership change. The language is recorded in the
 [glossary](../glossary.md).
 
 We ran a physical EventStorming session to discover the first model. All participants
-were technical. The digitized result is in [eventstorming/](../eventstorming/).
+were technical. The digitized result is in the
+[EventStorming documentation](../eventstorming/).
 
 ## Consequences
 
