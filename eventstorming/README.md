@@ -7,9 +7,13 @@ before choosing the architecture, following [ADR-001](../adrs/adr-001-use-ddd.md
 The model started as a physical workshop before we digitized and refined it into the
 three views below.
 
-| Workshop 3 | Workshop 2 | Workshop 1 |
-|---|---|---|
-| ![Physical EventStorming workshop 3](physical_eventstorming/physical_event_storming3.jpg) | ![Physical EventStorming workshop 2](physical_eventstorming/physical_event_storming2.jpg) | ![Physical EventStorming workshop 1](physical_eventstorming/physical_event_storming1.jpg) |
+<table>
+  <tr>
+    <td><img src="physical_eventstorming/physical_event_storming3.jpg" alt="Physical EventStorming table"></td>
+    <td><img src="physical_eventstorming/physical_event_storming2.jpg" alt="Physical EventStorming table"></td>
+    <td><img src="physical_eventstorming/physical_event_storming1.jpg" alt="Physical EventStorming table"></td>
+  </tr>
+</table>
 
 ## 1. Map the business flow
 
